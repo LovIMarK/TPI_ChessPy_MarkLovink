@@ -17,18 +17,19 @@ clock = pygame.time.Clock()
 window.fill((217,217,217))
 
 
+
+
 board=Board(20,20)
-allSquares=board.DrawBoard(window)
-pieces=board.DrawPieces()
+board.DrawBorder(window)
+
+allBoard=board.PiecesSquarePos
 
 # Function that get all the squares positions and display it in the pygame window 
-def Draw(allSquares,pieces,window):
+def Draw(allBoard,window):
 
-    for obj in allSquares:
+    for obj in allBoard:
         window.blit(obj.image, obj.rect)
-    for obj in pieces:
         pygame.draw.rect(window, (255, 0, 0), obj.rect, 2)
-        window.blit(obj.image, obj.rect)
 
 
 #Main loop that display the pygame window and the game(board,pawn,pieces)
@@ -38,9 +39,11 @@ while True:
             pygame.quit()
             quit()
        
-               
-    Draw(allSquares,pieces,window)
     
+
+         
+    Draw(allBoard,window)
+
     pygame.display.flip()
     print (clock.get_fps())
     #function to control the frame rate or the maximum number of frames per second (FPS) 

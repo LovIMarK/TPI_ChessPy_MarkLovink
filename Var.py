@@ -20,3 +20,5 @@ BISHOP=u'\u265D'
 KNIGHT=u'\u265E'
 PAWN=u'\u265F'
 
+
+
