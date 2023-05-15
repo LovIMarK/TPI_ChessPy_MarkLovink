@@ -19,10 +19,15 @@ window.fill((217,217,217))
 
 board=Board(20,20)
 allSquares=board.DrawBoard(window)
+pieces=board.DrawPieces()
 
 # Function that get all the squares positions and display it in the pygame window 
-def Draw(allSquares,window):
+def Draw(allSquares,pieces,window):
+
     for obj in allSquares:
+        window.blit(obj.image, obj.rect)
+    for obj in pieces:
+        pygame.draw.rect(window, (255, 0, 0), obj.rect, 2)
         window.blit(obj.image, obj.rect)
 
 
@@ -34,7 +39,7 @@ while True:
             quit()
        
                
-    Draw(allSquares,window)
+    Draw(allSquares,pieces,window)
     
     pygame.display.flip()
     print (clock.get_fps())

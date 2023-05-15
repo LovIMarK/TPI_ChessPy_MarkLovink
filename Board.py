@@ -7,6 +7,8 @@
 import pygame
 from Var import*
 from Square import Square
+from Pawn import Pawn
+from King import King
 
 
 ####
@@ -40,3 +42,38 @@ class Board():
             
                
         return self.sqarePos
+    
+
+
+    def DrawPieces(self):
+        pawnPos=[]
+        for i in range(8):
+            for j in range(8): 
+                if i==0:
+                    if j==0 or j==7:
+                        pawnPos.append(King(self.x+(WIDTHSQUARE*j),self.y+(WIDTHSQUARE*i),WIDTHSQUARE, BLUE,ROOK))
+                    elif j==1 or j==6:
+                        pawnPos.append(King(self.x+(WIDTHSQUARE*j),self.y+(WIDTHSQUARE*i),WIDTHSQUARE, BLUE,KNIGHT))
+                    elif j==2 or j==5:
+                        pawnPos.append(King(self.x+(WIDTHSQUARE*j),self.y+(WIDTHSQUARE*i),WIDTHSQUARE, BLUE,BISHOP))
+                    elif j==3:
+                        pawnPos.append(King(self.x+(WIDTHSQUARE*j),self.y+(WIDTHSQUARE*i),WIDTHSQUARE, BLUE,QUEEN))
+                    elif j==4:
+                        pawnPos.append(King(self.x+(WIDTHSQUARE*j),self.y+(WIDTHSQUARE*i),WIDTHSQUARE, BLUE,KING))
+                elif  i==7:
+                    if j==0 or j==7:
+                        pawnPos.append(King(self.x+(WIDTHSQUARE*j),self.y+(WIDTHSQUARE*i),WIDTHSQUARE, RED,ROOK))
+                    elif j==1 or j==6:
+                        pawnPos.append(King(self.x+(WIDTHSQUARE*j),self.y+(WIDTHSQUARE*i),WIDTHSQUARE, RED,KNIGHT))
+                    elif j==2 or j==5:
+                        pawnPos.append(King(self.x+(WIDTHSQUARE*j),self.y+(WIDTHSQUARE*i),WIDTHSQUARE, RED,BISHOP))
+                    elif j==3:
+                        pawnPos.append(King(self.x+(WIDTHSQUARE*j),self.y+(WIDTHSQUARE*i),WIDTHSQUARE, RED,QUEEN))
+                    elif j==4:
+                        pawnPos.append(King(self.x+(WIDTHSQUARE*j),self.y+(WIDTHSQUARE*i),WIDTHSQUARE, RED,KING))
+                elif i==1 :
+                    pawnPos.append(Pawn(self.x+(WIDTHSQUARE*j),self.y+(WIDTHSQUARE*i),WIDTHSQUARE, BLUE,PAWN))
+                elif i==6:
+                    pawnPos.append(Pawn(self.x+(WIDTHSQUARE*j),self.y+(WIDTHSQUARE*i),WIDTHSQUARE,RED,PAWN))
+
+        return pawnPos
