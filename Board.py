@@ -21,7 +21,8 @@ class Board():
         self.border=5
         self.x=x
         self.y=y
-        self.PiecesSquarePos=[]
+        self.PiecesPos=[]
+        self.Square=[]
         self.DrawBoard()
         self.DrawPieces()
 
@@ -31,53 +32,68 @@ class Board():
 
     def DrawBoard(self):
         
+  
+
+        self.Square = [[0] * 8 for _ in range(8)]
         
 
-        for i in range(8):
-            for j in range(8):
+        for i in range(ROW):
+            for j in range(COL):
                 if j%2==0 and i%2==0:
-                    self.PiecesSquarePos.append(Square(self.x+(WIDTHSQUARE*j),self.y+(WIDTHSQUARE*i),WIDTHSQUARE,BLACK))
+                    self.Square[j][i]=Square(self.x+(WIDTHSQUARE*j),self.y+(WIDTHSQUARE*i),j,i,WIDTHSQUARE,BLACK)
                 elif j%1==0 and i%2==0:
-                    self.PiecesSquarePos.append(Square(self.x+(WIDTHSQUARE*j),self.y+(WIDTHSQUARE*i),WIDTHSQUARE,WHITE))
+                    self.Square[j][i]=Square(self.x+(WIDTHSQUARE*j),self.y+(WIDTHSQUARE*i),j,i,WIDTHSQUARE,WHITE)
                 elif j%2==0 and i%1==0:
-                    self.PiecesSquarePos.append(Square(self.x+(WIDTHSQUARE*j),self.y+(WIDTHSQUARE*i),WIDTHSQUARE,WHITE))
+                    self.Square[j][i]=Square(self.x+(WIDTHSQUARE*j),self.y+(WIDTHSQUARE*i),j,i,WIDTHSQUARE,WHITE)
                 else:
-                    self.PiecesSquarePos.append(Square(self.x+(WIDTHSQUARE*j),self.y+(WIDTHSQUARE*i),WIDTHSQUARE,BLACK))
+                    self.Square[j][i]=Square(self.x+(WIDTHSQUARE*j),self.y+(WIDTHSQUARE*i),j,i,WIDTHSQUARE,BLACK)
             
                
-        return self.PiecesSquarePos
+        return self.Square
     
 
 
     def DrawPieces(self):
-       
+        self.PiecesPos = [[0] * 8 for _ in range(8)]
         for i in range(8):
             for j in range(8): 
                 if i==0:
                     if j==0 or j==7:
-                        self.PiecesSquarePos.append(King(self.x+(WIDTHSQUARE*j),self.y+(WIDTHSQUARE*i),WIDTHSQUARE, BLUE,ROOK))
+                        self.PiecesPos[j][i]=King(self.x+(WIDTHSQUARE*j),self.y+(WIDTHSQUARE*i),WIDTHSQUARE, BLUE,ROOK,j,i)
+                        self.Square[j][i].empty=False
                     elif j==1 or j==6:
-                        self.PiecesSquarePos.append(King(self.x+(WIDTHSQUARE*j),self.y+(WIDTHSQUARE*i),WIDTHSQUARE, BLUE,KNIGHT))
+                        self.PiecesPos[j][i]=King(self.x+(WIDTHSQUARE*j),self.y+(WIDTHSQUARE*i),WIDTHSQUARE, BLUE,KNIGHT,j,i)
+                        self.Square[j][i].empty=False
                     elif j==2 or j==5:
-                        self.PiecesSquarePos.append(King(self.x+(WIDTHSQUARE*j),self.y+(WIDTHSQUARE*i),WIDTHSQUARE, BLUE,BISHOP))
+                        self.PiecesPos[j][i]=King(self.x+(WIDTHSQUARE*j),self.y+(WIDTHSQUARE*i),WIDTHSQUARE, BLUE,BISHOP,j,i)
+                        self.Square[j][i].empty=False
                     elif j==3:
-                        self.PiecesSquarePos.append(King(self.x+(WIDTHSQUARE*j),self.y+(WIDTHSQUARE*i),WIDTHSQUARE, BLUE,QUEEN))
+                        self.PiecesPos[j][i]=King(self.x+(WIDTHSQUARE*j),self.y+(WIDTHSQUARE*i),WIDTHSQUARE, BLUE,QUEEN,j,i)
+                        self.Square[j][i].empty=False
                     elif j==4:
-                        self.PiecesSquarePos.append(King(self.x+(WIDTHSQUARE*j),self.y+(WIDTHSQUARE*i),WIDTHSQUARE, BLUE,KING))
+                        self.PiecesPos[j][i]=King(self.x+(WIDTHSQUARE*j),self.y+(WIDTHSQUARE*i),WIDTHSQUARE, BLUE,KING,j,i)
+                        self.Square[j][i].empty=False
                 elif  i==7:
                     if j==0 or j==7:
-                        self.PiecesSquarePos.append(King(self.x+(WIDTHSQUARE*j),self.y+(WIDTHSQUARE*i),WIDTHSQUARE, RED,ROOK))
+                        self.PiecesPos[j][i]=King(self.x+(WIDTHSQUARE*j),self.y+(WIDTHSQUARE*i),WIDTHSQUARE, RED,ROOK,j,i)
+                        self.Square[j][i].empty=False
                     elif j==1 or j==6:
-                        self.PiecesSquarePos.append(King(self.x+(WIDTHSQUARE*j),self.y+(WIDTHSQUARE*i),WIDTHSQUARE, RED,KNIGHT))
+                        self.PiecesPos[j][i]=King(self.x+(WIDTHSQUARE*j),self.y+(WIDTHSQUARE*i),WIDTHSQUARE, RED,KNIGHT,j,i)
+                        self.Square[j][i].empty=False
                     elif j==2 or j==5:
-                        self.PiecesSquarePos.append(King(self.x+(WIDTHSQUARE*j),self.y+(WIDTHSQUARE*i),WIDTHSQUARE, RED,BISHOP))
+                        self.PiecesPos[j][i]=King(self.x+(WIDTHSQUARE*j),self.y+(WIDTHSQUARE*i),WIDTHSQUARE, RED,BISHOP,j,i)
+                        self.Square[j][i].empty=False
                     elif j==3:
-                        self.PiecesSquarePos.append(King(self.x+(WIDTHSQUARE*j),self.y+(WIDTHSQUARE*i),WIDTHSQUARE, RED,QUEEN))
+                        self.PiecesPos[j][i]=King(self.x+(WIDTHSQUARE*j),self.y+(WIDTHSQUARE*i),WIDTHSQUARE, RED,QUEEN,j,i)
+                        self.Square[j][i].empty=False
                     elif j==4:
-                        self.PiecesSquarePos.append(King(self.x+(WIDTHSQUARE*j),self.y+(WIDTHSQUARE*i),WIDTHSQUARE, RED,KING))
-                elif i==1 :
-                    self.PiecesSquarePos.append(Pawn(self.x+(WIDTHSQUARE*j),self.y+(WIDTHSQUARE*i),WIDTHSQUARE, BLUE,PAWN))
+                        self.PiecesPos[j][i]=King(self.x+(WIDTHSQUARE*j),self.y+(WIDTHSQUARE*i),WIDTHSQUARE, RED,KING,j,i)
+                        self.Square[j][i].empty=False
+                if i==1 :
+                    self.PiecesPos[j][i]=Pawn(self.x+(WIDTHSQUARE*j),self.y+(WIDTHSQUARE*i),WIDTHSQUARE, BLUE,PAWN,j,i)
+                    self.Square[j][i].empty=False
                 elif i==6:
-                    self.PiecesSquarePos.append(Pawn(self.x+(WIDTHSQUARE*j),self.y+(WIDTHSQUARE*i),WIDTHSQUARE,RED,PAWN))
+                    self.PiecesPos[j][i]=Pawn(self.x+(WIDTHSQUARE*j),self.y+(WIDTHSQUARE*i),WIDTHSQUARE,RED,PAWN,j,i)
+                    self.Square[j][i].empty=False
 
-        return self.PiecesSquarePos
+        return self.PiecesPos
