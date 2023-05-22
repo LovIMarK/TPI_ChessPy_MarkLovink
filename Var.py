@@ -1,7 +1,7 @@
 ###ETML
 ###Auteur : Mark Lovink
 ###Date : 15.05.2023
-###Description : VAr files handling each constant
+###Description : Var files handling each constant
 
 
 HEIGHT=800
@@ -11,6 +11,7 @@ WHITE=(255,255,255)
 BLUE=(61, 66, 190)
 RED=(190, 61, 61)
 GREY=(217,217,217)
+GOLD=(190,146,61)
 
 ROW=8
 COL=8
