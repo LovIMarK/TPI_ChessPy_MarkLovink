@@ -1,8 +1,14 @@
+###ETML
+###Auteur : Mark Lovink
+###Date : 23.05.2023
+###Description : Main files to display the game and handle the interaction with the players
+
+
 #Import of library and files
 import pygame
 from Var import *
 from Button import Button
-from Program import Chess
+from Game import Game
 
 pygame.init()
 
@@ -14,7 +20,7 @@ clock = pygame.time.Clock()
 buttonTwoPlayers=Button(100,HEIGHT/2-80,100,80,"2 Players")
 buttonLastGame=Button(100,buttonTwoPlayers.rect.y+buttonTwoPlayers.rect.height,100,80,"Last Game")
 
-chessGame=Chess(window)
+chessGame=Game(window)
 
 Run=True
 #Main loop that display the pygame window and the game(board,pawn,pieces)
@@ -28,11 +34,12 @@ while Run:
         elif event.type == pygame.MOUSEBUTTONDOWN :
             posMouse = pygame.mouse.get_pos()
             if buttonTwoPlayers.rect.collidepoint(posMouse):
-                chessGame.Game()
+                chessGame.StartGame()
+                chessGame.load=False
                 pass
             elif buttonLastGame.rect.collidepoint(posMouse):
                 chessGame.load=True
-                chessGame.Game()
+                chessGame.StartGame()
                 pass
 
     buttonTwoPlayers.Draw(window)

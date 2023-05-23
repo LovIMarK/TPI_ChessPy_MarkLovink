@@ -14,7 +14,7 @@ from Button import Button
 
 
 
-class Chess:
+class Game:
     def __init__(self,window,load=False):
         self.window=window
         self.load=load
@@ -23,7 +23,7 @@ class Chess:
 
 
 
-    def SafeGame(self,board,players):
+    def SaveGame(self,board,players):
         
         pieces_data = []
         if players[0].playing:
@@ -178,7 +178,7 @@ class Chess:
             for col in range(COL):
                 if board.PiecesPos[col][row]!=0:
                     board.PiecesPos[col][row].Mouvement(board)
-    def Game(self):
+    def StartGame(self):
         clock = pygame.time.Clock()
         board=Board(20,20)
         
@@ -187,6 +187,7 @@ class Chess:
         players=[playerOne,playerTwo]
 
         saveButton=Button(WIDTH-120,board.y,100,80,"Save")
+        menuButton=Button(WIDTH-120,board.y+(saveButton.rect.height*2),100,80,"Menu")
         
 
         if self.load:
@@ -198,7 +199,7 @@ class Chess:
             board.DrawBorder(self.window)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    #SafeGame(board,players)
+                    #SaveGame(board,players)
                     pygame.quit()
                     quit()
                 elif event.type == pygame.MOUSEMOTION :
@@ -211,10 +212,15 @@ class Chess:
                 elif event.type == pygame.MOUSEBUTTONDOWN :
                     posMouse = pygame.mouse.get_pos()
                     if saveButton.rect.collidepoint(posMouse):
-                        self.SafeGame(board,players)
-                    stopLoops = False
-                    if playerOne.rect.collidepoint(posMouse):
+                        self.SaveGame(board,players)
+                    elif menuButton.rect.collidepoint(posMouse):
+                        Run= False
+                    elif playerOne.rect.collidepoint(posMouse):
                         board.lastShowMovement=True
+
+
+
+                    stopLoops = False
                     if not board.lastShowMovement:    
                         for row in range(ROW):
                             for col in range(COL):
@@ -233,6 +239,8 @@ class Chess:
                             if stopLoops:
                                 break    
                                 
+            menuButton.DrawBackGround(self.window)
+            menuButton.Draw(self.window)
             saveButton.DrawBackGround(self.window)
             saveButton.Draw(self.window)
             self.HandlePossibleMouvement(board)
