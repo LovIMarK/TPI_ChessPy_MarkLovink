@@ -48,7 +48,8 @@ class Piece():
                             if not board.Square[col][row].empty:
                                 board.pieceDies.append(board.PiecesPos[col][row])
                             #changer avec les valeur du rect et les colonnes
-                            board.allMovement.append((self.col,self.row,col,row))
+                            board.lastMovement.clear()
+                            board.lastMovement.append((self.col,self.row,col,row))
                             board.PiecesPos[col][row]=board.PiecesPos[self.col][self.row]
                             board.PiecesPos[self.col][self.row]=0
                             board.Square[self.col][self.row].empty=True
