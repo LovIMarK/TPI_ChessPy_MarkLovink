@@ -3,8 +3,8 @@ from Piece import Piece
 
 class Knight(Piece):
 
-    def __init__(self,x,y,size,color,unicode,col,row):
-        super().__init__(x,y,size,color,col,row,"knight")
+    def __init__(self,x,y,size,color,unicode,col,row,id):
+        super().__init__(x,y,size,color,col,row,"knight",id)
         self.image = self.font.render(unicode, True, color)
         self.knightMoves = [(1, 2), (2, 1), (-1, 2), (-2, 1), (1, -2), (2, -1), (-1, -2), (-2, -1)]
 

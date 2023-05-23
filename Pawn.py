@@ -1,12 +1,11 @@
 import pygame
 from Piece import Piece
 from Var import *
-from Circle import Circle
 
 class Pawn(Piece):
 
-    def __init__(self,x,y,size,color,unicode,col,row):
-        super().__init__(x,y,size,color,col,row,"pawn")
+    def __init__(self,x,y,size,color,unicode,col,row,id):
+        super().__init__(x,y,size,color,col,row,"pawn",id)
         self.image = self.font.render(unicode, True, color)
         self.firstMove=False
             

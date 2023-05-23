@@ -65,46 +65,50 @@ class Board():
         
 
     def DrawPieces(self):
+        id=0
         self.PiecesPos = [[0] * COL for _ in range(ROW)]
         for row in range(8):
             for col in range(8): 
                 if row==0:
                     if col==0 or col==7:
-                        self.PiecesPos[col][row]=Rook(self.x+(WIDTHSQUARE*col),self.y+(WIDTHSQUARE*row),WIDTHSQUARE, BLUE,ROOK,col,row)
+                        self.PiecesPos[col][row]=Rook(self.x+(WIDTHSQUARE*col),self.y+(WIDTHSQUARE*row),WIDTHSQUARE, BLUE,ROOK,col,row,id)
                         self.Square[col][row].empty=False
                     elif col==1 or col==6:
-                        self.PiecesPos[col][row]=Knight(self.x+(WIDTHSQUARE*col),self.y+(WIDTHSQUARE*row),WIDTHSQUARE, BLUE,KNIGHT,col,row)
+                        self.PiecesPos[col][row]=Knight(self.x+(WIDTHSQUARE*col),self.y+(WIDTHSQUARE*row),WIDTHSQUARE, BLUE,KNIGHT,col,row,id)
                         self.Square[col][row].empty=False
                     elif col==2 or col==5:
-                        self.PiecesPos[col][row]=Bishop(self.x+(WIDTHSQUARE*col),self.y+(WIDTHSQUARE*row),WIDTHSQUARE, BLUE,BISHOP,col,row)
+                        self.PiecesPos[col][row]=Bishop(self.x+(WIDTHSQUARE*col),self.y+(WIDTHSQUARE*row),WIDTHSQUARE, BLUE,BISHOP,col,row,id)
                         self.Square[col][row].empty=False
                     elif col==3:
-                        self.PiecesPos[col][row]=Queen(self.x+(WIDTHSQUARE*col),self.y+(WIDTHSQUARE*row),WIDTHSQUARE, BLUE,QUEEN,col,row)
+                        self.PiecesPos[col][row]=Queen(self.x+(WIDTHSQUARE*col),self.y+(WIDTHSQUARE*row),WIDTHSQUARE, BLUE,QUEEN,col,row,id)
                         self.Square[col][row].empty=False
                     elif col==4:
-                        self.PiecesPos[col][row]=King(self.x+(WIDTHSQUARE*col),self.y+(WIDTHSQUARE*row),WIDTHSQUARE, BLUE,KING,col,row)
+                        self.PiecesPos[col][row]=King(self.x+(WIDTHSQUARE*col),self.y+(WIDTHSQUARE*row),WIDTHSQUARE, BLUE,KING,col,row,id)
                         self.Square[col][row].empty=False
+                    id+=1
                 elif  row==7:
                     if col==0 or col==7:
-                        self.PiecesPos[col][row]=Rook(self.x+(WIDTHSQUARE*col),self.y+(WIDTHSQUARE*row),WIDTHSQUARE, RED,ROOK,col,row)
+                        self.PiecesPos[col][row]=Rook(self.x+(WIDTHSQUARE*col),self.y+(WIDTHSQUARE*row),WIDTHSQUARE, RED,ROOK,col,row,id)
                         self.Square[col][row].empty=False
                     elif col==1 or col==6:
-                        self.PiecesPos[col][row]=Knight(self.x+(WIDTHSQUARE*col),self.y+(WIDTHSQUARE*row),WIDTHSQUARE, RED,KNIGHT,col,row)
+                        self.PiecesPos[col][row]=Knight(self.x+(WIDTHSQUARE*col),self.y+(WIDTHSQUARE*row),WIDTHSQUARE, RED,KNIGHT,col,row,id)
                         self.Square[col][row].empty=False
                     elif col==2 or col==5:
-                        self.PiecesPos[col][row]=Bishop(self.x+(WIDTHSQUARE*col),self.y+(WIDTHSQUARE*row),WIDTHSQUARE, RED,BISHOP,col,row)
+                        self.PiecesPos[col][row]=Bishop(self.x+(WIDTHSQUARE*col),self.y+(WIDTHSQUARE*row),WIDTHSQUARE, RED,BISHOP,col,row,id)
                         self.Square[col][row].empty=False
                     elif col==3:
-                        self.PiecesPos[col][row]=Queen(self.x+(WIDTHSQUARE*col),self.y+(WIDTHSQUARE*row),WIDTHSQUARE, RED,QUEEN,col,row)
+                        self.PiecesPos[col][row]=Queen(self.x+(WIDTHSQUARE*col),self.y+(WIDTHSQUARE*row),WIDTHSQUARE, RED,QUEEN,col,row,id)
                         self.Square[col][row].empty=False
                     elif col==4:
-                        self.PiecesPos[col][row]=King(self.x+(WIDTHSQUARE*col),self.y+(WIDTHSQUARE*row),WIDTHSQUARE, RED,KING,col,row)
+                        self.PiecesPos[col][row]=King(self.x+(WIDTHSQUARE*col),self.y+(WIDTHSQUARE*row),WIDTHSQUARE, RED,KING,col,row,id)
                         self.Square[col][row].empty=False
-                if row==1 :
-                    self.PiecesPos[col][row]=Pawn(self.x+(WIDTHSQUARE*col),self.y+(WIDTHSQUARE*row),WIDTHSQUARE, BLUE,PAWN,col,row)
+                    id+=1
+                elif row==1 :
+                    self.PiecesPos[col][row]=Pawn(self.x+(WIDTHSQUARE*col),self.y+(WIDTHSQUARE*row),WIDTHSQUARE, BLUE,PAWN,col,row,id)
                     self.Square[col][row].empty=False
+                    id+=1
                 elif row==6:
-                    self.PiecesPos[col][row]=Pawn(self.x+(WIDTHSQUARE*col),self.y+(WIDTHSQUARE*row),WIDTHSQUARE,RED,PAWN,col,row)
+                    self.PiecesPos[col][row]=Pawn(self.x+(WIDTHSQUARE*col),self.y+(WIDTHSQUARE*row),WIDTHSQUARE,RED,PAWN,col,row,id)
                     self.Square[col][row].empty=False
-
+                    id+=1
         return self.PiecesPos

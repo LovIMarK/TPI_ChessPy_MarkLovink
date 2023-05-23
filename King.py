@@ -5,8 +5,8 @@ from Var import *
 
 class King(Piece):
 
-    def __init__(self,x,y,size,color,unicode,col,row):
-        super().__init__(x,y,size,color,col,row,"king")
+    def __init__(self,x,y,size,color,unicode,col,row,id):
+        super().__init__(x,y,size,color,col,row,"king",id)
         self.image = self.font.render(unicode, True, color)
         self.kingMoves = [(0, 1), (1, 1), (-1, 1), (0, -1), (1, -1), (-1, -1), (1, 0), (-1, 0)]
         #self.rock=False
@@ -18,9 +18,8 @@ class King(Piece):
     def Mouvement(self,board):
 
         self.possibleMoves.clear()
-        self.possibleMoves= [[0] * 8 for _ in range(8)]
+        self.possibleMoves= [[0] * COL for _ in range(ROW)]
         if self.clicked :
-                
 
                 for obj in self.kingMoves:
                     col = self.col + obj[0]

@@ -5,10 +5,10 @@
 
 #Import of library and files
 import pygame
+import json
 from Var import *
 from Board import Board
 from Player import Player
-from Circle import Circle
 
 pygame.init()
 
@@ -27,8 +27,89 @@ players=[playerOne,playerTwo]
 
 
 
+def SafeGame(board,players):
+    
+    pieces_data = []
+    if players[0].playing:
+        player=players[0].name
+    else:
+        player=players[1].name
+    for row in range(ROW):
+        for col in range(COL):
+            if board.PiecesPos[col][row]!=0:    
+                piece_data = {
+                    'id': board.PiecesPos[col][row].id,
+                    'col': board.PiecesPos[col][row].col,
+                    'row': board.PiecesPos[col][row].row,
+                    'player':player
+                }
+                pieces_data.append(piece_data)
+
+    # Définissez le chemin du fichier JSON
+    file_path = 'pieces.json'
+
+    # Enregistrez les données dans le fichier JSON
+    with open(file_path, 'w') as file:
+        json.dump(pieces_data, file)
 
 
+
+
+
+def LoadGame(board,players):
+    file_path = 'pieces.json'
+
+    # Charger les données depuis le fichier JSON
+    with open(file_path, 'r') as file:
+        pieces_data = json.load(file)
+
+    # Liste pour stocker les objets Piece
+    pieces = []
+
+    # Parcourir les données des pièces
+    for piece_data in pieces_data:
+        id = piece_data['id']
+        col = piece_data['col']
+        row = piece_data['row']
+        player = piece_data['player']
+        
+        
+        # Ajouter l'objet Piece à la liste
+        pieces.append((id,col,row,player))
+         
+    for row in range(ROW):
+        for col in range(COL):
+            if board.PiecesPos[col][row]!=0:
+                for i in range(len(pieces)):
+                    ###ChatGPT how to check if a number is not in a list
+                    if not any(i == id[0] for id in pieces) and board.PiecesPos[col][row].id==i:
+                    ###
+                        board.pieceDies.append(board.PiecesPos[col][row])
+                        break
+                    if board.PiecesPos[col][row].id==pieces[i][0]:
+                        if board.PiecesPos[col][row].col!=pieces[i][1] or board.PiecesPos[col][row].row!=pieces[i][2]:
+                            board.PiecesPos[col][row].col=pieces[i][1]
+                            board.PiecesPos[col][row].row=pieces[i][2]
+                            board.PiecesPos[col][row].firstMove=True
+                            tempPiece = board.PiecesPos[col][row]
+                            board.PiecesPos[pieces[i][1]][pieces[i][2]]=tempPiece
+                            board.PiecesPos[col][row]=0
+                        break
+
+    for row in range(ROW):
+        for col in range(COL):        
+            if board.PiecesPos[col][row]!=0:
+                board.Square[col][row].empty=False
+            else:
+                board.Square[col][row].empty=True
+    for obj in players:
+        if obj.name==pieces[0][3]:
+            obj.playing=True
+        else:
+            obj.playing=False
+
+
+   
 
 # Function that get all the squares positions and display it in the pygame window 
 def Draw(board,window,players):   
@@ -102,7 +183,7 @@ def HandlePossibleMouvement(board):
             if board.PiecesPos[col][row]!=0:
                 board.PiecesPos[col][row].Mouvement(board)
 
-
+#LoadGame(board,players)
 Run=True
 #Main loop that display the pygame window and the game(board,pawn,pieces)
 while Run:
@@ -110,6 +191,7 @@ while Run:
     board.DrawBorder(window)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
+            SafeGame(board,players)
             pygame.quit()
             quit()
         elif event.type == pygame.MOUSEMOTION :

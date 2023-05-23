@@ -4,10 +4,11 @@ from Var import *
 
 class Piece():
 
-    def __init__(self,x,y,size,color,col,row,name):
+    def __init__(self,x,y,size,color,col,row,name,id):
         super().__init__()
         self.rect = pygame.Rect(x, y, size, size)
         self.font = pygame.font.Font("Fonts/DejaVuSans.ttf", size)
+        self.id=id
         self.color=color
         self.name=name
         self.col=col
@@ -43,11 +44,11 @@ class Piece():
                 for col in range(COL):
                     if board.Square[col][row].rect.collidepoint(posMouse)  :
                         if self.possibleMoves[col][row]:
-                            #board.lastMovement =[[0] * 8 for _ in range(8)]
+                           
                             if not board.Square[col][row].empty:
                                 board.pieceDies.append(board.PiecesPos[col][row])
                             #changer avec les valeur du rect et les colonnes
-                            #board.lastMovement[self.col][self.row]=board.PiecesPos[self.col][self.row]
+                            board.allMovement.append((self.col,self.row,col,row))
                             board.PiecesPos[col][row]=board.PiecesPos[self.col][self.row]
                             board.PiecesPos[self.col][self.row]=0
                             board.Square[self.col][self.row].empty=True
@@ -59,4 +60,3 @@ class Piece():
                             for obj in players:
                                 obj.ChangePlayer()
                             self.possibleMoves.clear()
-                            

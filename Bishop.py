@@ -4,8 +4,8 @@ from Piece import Piece
 
 class Bishop(Piece):
 
-    def __init__(self,x,y,size,color,unicode,col,row):
-        super().__init__(x,y,size,color,col,row,"bishop")
+    def __init__(self,x,y,size,color,unicode,col,row,id):
+        super().__init__(x,y,size,color,col,row,"bishop",id)
         self.image = self.font.render(unicode, True, color)
         self.bishopMoves = [(1, 1), (-1, 1), (1, -1), (-1, -1)]
 

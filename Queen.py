@@ -5,8 +5,8 @@ from Var import *
 
 class Queen(Piece):
 
-    def __init__(self,x,y,size,color,unicode,col,row):
-        super().__init__(x,y,size,color,col,row,"queen")
+    def __init__(self,x,y,size,color,unicode,col,row,id):
+        super().__init__(x,y,size,color,col,row,"queen",id)
         self.image = self.font.render(unicode, True, color)
         self.queenMoves = [(1, 1), (-1, 1), (1, -1), (-1, -1), (1, 0), (-1, 0), (0, 1), (0, -1)]
 
