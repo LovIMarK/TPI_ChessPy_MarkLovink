@@ -33,6 +33,7 @@ class Board():
         self.PiecesPos=[]
         self.Square=[]
         self.lastMovement=[]
+        self.pieceDies=[]
         self.DrawBoard()
         self.DrawPieces()
 

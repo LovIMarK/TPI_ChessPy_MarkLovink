@@ -33,33 +33,31 @@ players=[playerOne,playerTwo]
 # Function that get all the squares positions and display it in the pygame window 
 def Draw(board,window,players):   
     
+    ###Draw board
     for row in range(ROW):
         for col in range(COL):
             window.blit(board.Square[col][row].image, board.Square[col][row].rect)
            
-           
+
+    ###Draw pieces
     for row in range(ROW):
         for col in range(COL):
             if not board.lastShowMovement:
                 if board.PiecesPos[col][row]!=0 and not board.PiecesPos[col][row].clicked :
                     window.blit(board.PiecesPos[col][row].image,(board.PiecesPos[col][row].col*WIDTHSQUARE+board.x,board.PiecesPos[col][row].row*WIDTHSQUARE+board.y))
-                    #pygame.draw.rect(window, (255, 0, 0), board.PiecesPos[col][row].rect, 2)
+                   # pygame.draw.rect(window, (255, 0, 0), board.PiecesPos[col][row].rect, 2)
                     
                 elif board.PiecesPos[col][row]!=0 and board.PiecesPos[col][row].clicked:
                     window.blit(board.PiecesPos[col][row].image,board.PiecesPos[col][row].rect)
-                    #pygame.draw.rect(window, (255, 0, 0), board.PiecesPos[col][i].rect, 2)
-                
-                if board.PiecesPos[col][row]!=0:
-                    for obj in board.PiecesPos[col][row].die:
-                        if obj.color==BLUE:
-                            #obj.font = pygame.font.Font("Fonts/DejaVuSans.ttf", 20)
-                            window.blit(obj.image,(board.size+board.x,0))
-                        else:
-                            #obj.font = pygame.font.Font("Fonts/DejaVuSans.ttf", 20)
-                            window.blit(obj.image,(board.size+board.x,board.size))
-            else :
-                if board.lastMovement[col][row]!=0:
-                    window.blit(board.lastMovement[col][row].image,board.lastMovement[col][row].rect)
+                    #pygame.draw.rect(window, (255, 0, 0), board.PiecesPos[col][row].rect, 2)
+
+                    
+            # else :
+            #     if board.lastMovement[col][row]!=0:
+            #         window.blit(board.lastMovement[col][row].image,board.lastMovement[col][row].rect)
+
+
+    ###Draw possible movements                
     for row in range(ROW):
         for col in range(COL):
             if board.PiecesPos[col][row]!=0 and board.PiecesPos[col][row].clicked:
@@ -67,6 +65,30 @@ def Draw(board,window,players):
                     for colP in range(COL):
                         if board.PiecesPos[col][row].possibleMoves[colP][rowP]!=0:
                             pygame.draw.circle(window, GOLD, (colP*WIDTHSQUARE+board.x+(WIDTHSQUARE/2),rowP*WIDTHSQUARE+board.y+(WIDTHSQUARE/2)), 15 )
+
+
+    ###Draw dead pieces
+    ###ChatGPT how to sort a list by name
+    sorted_list = sorted(board.pieceDies, key=lambda obj: ( obj.color,obj.name))
+    ###
+    index=0
+    reset_index = False
+    for obj in sorted_list:
+        
+        if obj.color==players[0].color:
+            index+=1
+            window.blit(obj.image,(board.size+board.x+(index*30),players[0].rect.y+obj.image.get_height()))
+        else:
+            if not reset_index:
+                index=0
+                reset_index=True
+            index+=1
+            window.blit(obj.image,(board.size+board.x+(index*30),board.size+(obj.image.get_height()/2)))
+    
+    
+
+
+    ###Draw players
     for obj in players:
         obj.Draw(window)
                 
@@ -106,14 +128,14 @@ while Run:
                 for row in range(ROW):
                     for col in range(COL):
                         if board.PiecesPos[col][row]!=0:
-                            if playerOne.playing and board.PiecesPos[col][row].color==playerOne.color:
+                            if playerOne.playing  and board.PiecesPos[col][row].color==playerOne.color:
                                 if board.PiecesPos[col][row].rect.collidepoint(posMouse):
-                                    board.PiecesPos[col][row].Clicked(posMouse,board.Square,board.PiecesPos,players,board)
+                                    board.PiecesPos[col][row].Clicked(posMouse,players,board)
                                     stopLoops=True
                                     break
-                            elif playerTwo.playing and board.PiecesPos[col][row].color==playerTwo.color:
+                            elif playerTwo.playing   and board.PiecesPos[col][row].color==playerTwo.color:
                                 if board.PiecesPos[col][row].rect.collidepoint(posMouse):
-                                    board.PiecesPos[col][row].Clicked(posMouse,board.Square,board.PiecesPos,players,board)
+                                    board.PiecesPos[col][row].Clicked(posMouse,players,board)
                                     stopLoops=True
                                     break
 
