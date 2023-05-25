@@ -21,7 +21,7 @@ class Piece():
         clicked=False
         for row in range(ROW):
             for col in range(COL):
-                if board.PiecesPos[col][row]!=0 and board.PiecesPos[col][row].clicked:
+                if board.piecesPos[col][row]!=0 and board.piecesPos[col][row].clicked:
                     clicked =True
         return clicked
 
@@ -29,11 +29,11 @@ class Piece():
     def MouvementPlayer(self,posMouse,board): 
         if self.clicked :
             self.rect.center=posMouse
-        elif self.rect!=pygame.Rect(self.col*WIDTHSQUARE+board.x,self.row*WIDTHSQUARE+board.y,WIDTHSQUARE,WIDTHSQUARE):
-            self.rect=pygame.Rect(self.col*WIDTHSQUARE+board.x,self.row*WIDTHSQUARE+board.y,WIDTHSQUARE,WIDTHSQUARE)
+        elif self.rect!=pygame.Rect(self.col*WIDTH_SQUARE+board.x,self.row*WIDTH_SQUARE+board.y,WIDTH_SQUARE,WIDTH_SQUARE):
+            self.rect=pygame.Rect(self.col*WIDTH_SQUARE+board.x,self.row*WIDTH_SQUARE+board.y,WIDTH_SQUARE,WIDTH_SQUARE)
 
     def Clicked(self,posMouse,players,board):
-        if not self.CheckClicked(board) and self.rect==pygame.Rect(self.col*WIDTHSQUARE+board.x,self.row*WIDTHSQUARE+board.y,WIDTHSQUARE,WIDTHSQUARE) :
+        if not self.CheckClicked(board) and self.rect==pygame.Rect(self.col*WIDTH_SQUARE+board.x,self.row*WIDTH_SQUARE+board.y,WIDTH_SQUARE,WIDTH_SQUARE) :
             self.clicked=True
         else:
             self.clicked=False
@@ -42,22 +42,26 @@ class Piece():
         if not self.clicked:
             for row in range(ROW):
                 for col in range(COL):
-                    if board.Square[col][row].rect.collidepoint(posMouse)  :
+                    if board.squares[col][row].rect.collidepoint(posMouse)  :
                         if self.possibleMoves[col][row]:
                            
-                            if not board.Square[col][row].empty:
-                                board.pieceDies.append(board.PiecesPos[col][row])
-                            #changer avec les valeur du rect et les colonnes
-                            board.lastMovement.clear()
-                            board.lastMovement.append((self.col,self.row,col,row))
-                            board.PiecesPos[col][row]=board.PiecesPos[self.col][self.row]
-                            board.PiecesPos[self.col][self.row]=0
-                            board.Square[self.col][self.row].empty=True
-                            board.Square[col][row].empty=False
+                            ###Dead piece
+                            if not board.squares[col][row].empty:
+                                board.piecesDie.append(board.piecesPos[col][row])
+
+                            ### Change piece information
+                            board.allMovement.append((self.col,self.row,col,row))
+                            board.piecesPos[col][row]=board.piecesPos[self.col][self.row]
+                            board.piecesPos[self.col][self.row]=0
+                            board.squares[self.col][self.row].empty=True
+                            board.squares[col][row].empty=False
                             self.col=col
                             self.row=row
-                            self.rect=pygame.Rect(self.col*WIDTHSQUARE+board.x,self.row*WIDTHSQUARE+board.y,WIDTHSQUARE,WIDTHSQUARE)
+                            self.rect=pygame.Rect(self.col*WIDTH_SQUARE+board.x,self.row*WIDTH_SQUARE+board.y,WIDTH_SQUARE,WIDTH_SQUARE)
                             self.firstMove=True
+                            self.possibleMoves.clear()
+
+                            ###Change player
                             for obj in players:
                                 obj.ChangePlayer()
-                            self.possibleMoves.clear()
+                            

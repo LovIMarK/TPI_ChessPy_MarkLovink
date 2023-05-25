@@ -1,8 +1,16 @@
-import pygame
+###ETML
+###Auteur : Mark Lovink
+###Date : 15.05.2023
+
+#Import of library and files
 from Piece import Piece
 from Var import *
 
-
+#####
+### Class king handles all authorized movements of the king and is font/character. 
+### image represents the character/shape of the king
+### kingMoves represents the directions in which a king can move
+#####
 class King(Piece):
 
     def __init__(self,x,y,size,color,unicode,col,row,id):
@@ -14,7 +22,7 @@ class King(Piece):
     
 
             
-
+    ###This function is used to check all the available movements of the king on the chessboard
     def Mouvement(self,board):
 
         self.possibleMoves.clear()
@@ -24,11 +32,11 @@ class King(Piece):
                 for obj in self.kingMoves:
                     col = self.col + obj[0]
                     row = self.row + obj[1]
-                    if 0 <= col < 8 and 0 <= row < 8 and board.Square[col][row].empty:
+                    if 0 <= col < 8 and 0 <= row < 8 and board.squares[col][row].empty:
                         self.possibleMoves[col][row] = True
-                    elif 0 <= col < 8 and 0 <= row < 8 and not board.Square[col][row].empty :
-                        if board.PiecesPos[col][row]!=0 :
-                            if board.PiecesPos[col][row].color!=self.color:
+                    elif 0 <= col < 8 and 0 <= row < 8 and not board.squares[col][row].empty :
+                        if board.piecesPos[col][row]!=0 :
+                            if board.piecesPos[col][row].color!=self.color:
                                 self.possibleMoves[col][row] = True
 
         

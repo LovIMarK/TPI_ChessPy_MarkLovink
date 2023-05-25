@@ -4,8 +4,9 @@
 ###Description : Var files handling each constant
 
 
-HEIGHT=800
-WIDTH=1200
+HEIGHT_WINDOW=800
+WIDTH_WINDOW=1200
+
 BLACK=(0,0,0)
 WHITE=(255,255,255)
 BLUE=(61, 66, 190)
@@ -16,7 +17,7 @@ GOLD=(190,146,61)
 ROW=8
 COL=8
 
-WIDTHSQUARE=80
+WIDTH_SQUARE=80
 
 
 KING=u'\u265A'

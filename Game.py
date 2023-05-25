@@ -1,7 +1,6 @@
 ###ETML
 ###Auteur : Mark Lovink
 ###Date : 15.05.2023
-###Description : Main files to display the game and handle the interaction with the players
 
 #Import of library and files
 import pygame
@@ -13,7 +12,11 @@ from Button import Button
 
 
 
-
+#####
+### Class Game handles the game display, player interaction, and saved game handling
+### window represents dimensions of the PyGame window
+### load variable determines whether the saved game should be displayed or not
+#####
 class Game:
     def __init__(self,window,load=False):
         self.window=window
@@ -22,82 +25,92 @@ class Game:
         
 
 
-
+    ##### Summary
+    ### Function that saves the id, column, row of each pieces on the chess board and the player playing in a JSON file
+    ##### Summary
     def SaveGame(self,board,players):
         
-        pieces_data = []
+        piecesData = []
+
         if players[0].playing:
             player=players[0].name
         else:
             player=players[1].name
+
+
         for row in range(ROW):
             for col in range(COL):
-                if board.PiecesPos[col][row]!=0:    
-                    piece_data = {
-                        'id': board.PiecesPos[col][row].id,
-                        'col': board.PiecesPos[col][row].col,
-                        'row': board.PiecesPos[col][row].row,
+                if board.piecesPos[col][row]!=0:    
+                    pieceData = {
+                        'id': board.piecesPos[col][row].id,
+                        'col': board.piecesPos[col][row].col,
+                        'row': board.piecesPos[col][row].row,
                         'player':player
                     }
-                    pieces_data.append(piece_data)
+                    piecesData.append(pieceData)
 
-        # Définissez le chemin du fichier JSON
-        file_path = 'pieces.json'
+        filePath = 'pieces.json'
 
-        # Enregistrez les données dans le fichier JSON
-        with open(file_path, 'w') as file:
-            json.dump(pieces_data, file)
-
+        # Open a JSON file with "w" to write the list of all piece information into it
+        with open(filePath, 'w') as file:
+            json.dump(piecesData, file)
 
 
 
 
+    ##### Summary
+    ### Function get the id, column, row of each pieces and the player playing in the JSON file and display it in the current game
+    ##### Summary
     def LoadGame(self,board,players):
-        file_path = 'pieces.json'
+        filePath = 'pieces.json'
 
-        # Charger les données depuis le fichier JSON
-        with open(file_path, 'r') as file:
-            pieces_data = json.load(file)
+        # Open the JSON file with "r" to read the list of all piece information
+        with open(filePath, 'r') as file:
+            piecesData = json.load(file)
 
-        # Liste pour stocker les objets Piece
         pieces = []
 
-        # Parcourir les données des pièces
-        for piece_data in pieces_data:
-            id = piece_data['id']
-            col = piece_data['col']
-            row = piece_data['row']
-            player = piece_data['player']
+        for pieceData in piecesData:
+            id = pieceData['id']
+            col = pieceData['col']
+            row = pieceData['row']
+            player = pieceData['player']
             
-            
-            # Ajouter l'objet Piece à la liste
             pieces.append((id,col,row,player))
-            
+
+
+        # Run through all the board with the new pieces on it
         for row in range(ROW):
             for col in range(COL):
-                if board.PiecesPos[col][row]!=0:
+                if board.piecesPos[col][row]!=0:
+                    # Run through the list with the pieces information
                     for i in range(len(pieces)):
                         ###ChatGPT how to check if a number is not in a list
-                        if not any(i == id[0] for id in pieces) and board.PiecesPos[col][row].id==i:
+                        # If the id is not in the JSON file the piece has been lost
+                        if not any(i == id[0] for id in pieces) and board.piecesPos[col][row].id==i:
                         ###
-                            board.pieceDies.append(board.PiecesPos[col][row])
+                            board.piecesDie.append(board.piecesPos[col][row])
                             break
-                        if board.PiecesPos[col][row].id==pieces[i][0]:
-                            if board.PiecesPos[col][row].col!=pieces[i][1] or board.PiecesPos[col][row].row!=pieces[i][2]:
-                                board.PiecesPos[col][row].col=pieces[i][1]
-                                board.PiecesPos[col][row].row=pieces[i][2]
-                                board.PiecesPos[col][row].firstMove=True
-                                tempPiece = board.PiecesPos[col][row]
-                                board.PiecesPos[pieces[i][1]][pieces[i][2]]=tempPiece
-                                board.PiecesPos[col][row]=0
+                        # If the pieces was not at the same position in the JSON file the piece change position
+                        if board.piecesPos[col][row].id==pieces[i][0]:
+                            if board.piecesPos[col][row].col!=pieces[i][1] or board.piecesPos[col][row].row!=pieces[i][2]:
+                                board.piecesPos[col][row].col=pieces[i][1]
+                                board.piecesPos[col][row].row=pieces[i][2]
+                                board.piecesPos[col][row].firstMove=True
+                                tempPiece = board.piecesPos[col][row]
+                                board.piecesPos[pieces[i][1]][pieces[i][2]]=tempPiece
+                                board.piecesPos[col][row]=0
                             break
 
+        #Check if there is a piece on the square of the board, if yes, it is not empty
         for row in range(ROW):
             for col in range(COL):        
-                if board.PiecesPos[col][row]!=0:
-                    board.Square[col][row].empty=False
+                if board.piecesPos[col][row]!=0:
+                    board.squares[col][row].empty=False
                 else:
-                    board.Square[col][row].empty=True
+                    board.squares[col][row].empty=True
+        
+        #Change the player playing
         for obj in players:
             if obj.name==pieces[0][3]:
                 obj.playing=True
@@ -106,51 +119,54 @@ class Game:
 
 
     
-
-    # Function that get all the squares positions and display it in the pygame window 
+    ##### Summary
+    ### Function that get all the squares, the pieces, the player and display it in the pygame window 
+    ##### Summary
     def Draw(self,board,window,players):   
         
         ###Draw board
         for row in range(ROW):
             for col in range(COL):
-                window.blit(board.Square[col][row].image, board.Square[col][row].rect)
+                window.blit(board.squares[col][row].image, board.squares[col][row].rect)
             
 
         ###Draw pieces
         for row in range(ROW):
             for col in range(COL):
-                if not board.lastShowMovement:
-                    if board.PiecesPos[col][row]!=0 and not board.PiecesPos[col][row].clicked :
-                        window.blit(board.PiecesPos[col][row].image,(board.PiecesPos[col][row].col*WIDTHSQUARE+board.x,board.PiecesPos[col][row].row*WIDTHSQUARE+board.y))
-                    # pygame.draw.rect(window, (255, 0, 0), board.PiecesPos[col][row].rect, 2)
-                        
-                    elif board.PiecesPos[col][row]!=0 and board.PiecesPos[col][row].clicked:
-                        window.blit(board.PiecesPos[col][row].image,board.PiecesPos[col][row].rect)
-                        #pygame.draw.rect(window, (255, 0, 0), board.PiecesPos[col][row].rect, 2)
-
-                        
-                # else :
-                #     if board.lastMovement[col][row]!=0:
-                #         window.blit(board.lastMovement[col][row].image,board.lastMovement[col][row].rect)
+                
+                if board.piecesPos[col][row]!=0 and not board.piecesPos[col][row].clicked :
+                    window.blit(board.piecesPos[col][row].image,(board.piecesPos[col][row].col*WIDTH_SQUARE+board.x,board.piecesPos[col][row].row*WIDTH_SQUARE+board.y))
+                    # pygame.draw.rect(window, (255, 0, 0), board.piecesPos[col][row].rect, 2)
+                    
+                elif board.piecesPos[col][row]!=0 and board.piecesPos[col][row].clicked:
+                    window.blit(board.piecesPos[col][row].image,board.piecesPos[col][row].rect)
+                    #pygame.draw.rect(window, (255, 0, 0), board.piecesPos[col][row].rect, 2)
 
 
+       
+        ###Draw last movement 
+        if board.showLastMovement:
+            window.blit(board.piecesPos[board.allMovement[len(board.allMovement)-1][0]][board.allMovement[len(board.allMovement)-1][1]].image,(board.piecesPos[board.allMovement[len(board.allMovement)-1][0]][board.allMovement[len(board.allMovement)-1][1]].rect))
+            pygame.draw.rect(window, GOLD, board.piecesPos[board.allMovement[len(board.allMovement)-1][0]][board.allMovement[len(board.allMovement)-1][1]].rect,5 )
+            pygame.draw.rect(window, GOLD, (board.allMovement[len(board.allMovement)-1][2]*WIDTH_SQUARE+board.x,board.allMovement[len(board.allMovement)-1][3]*WIDTH_SQUARE+board.y,WIDTH_SQUARE,WIDTH_SQUARE),5 )
+            
         ###Draw possible movements                
         for row in range(ROW):
             for col in range(COL):
-                if board.PiecesPos[col][row]!=0 and board.PiecesPos[col][row].clicked:
+                if board.piecesPos[col][row]!=0 and board.piecesPos[col][row].clicked:
                     for rowP in range(ROW):
                         for colP in range(COL):
-                            if board.PiecesPos[col][row].possibleMoves[colP][rowP]!=0:
-                                pygame.draw.circle(window, GOLD, (colP*WIDTHSQUARE+board.x+(WIDTHSQUARE/2),rowP*WIDTHSQUARE+board.y+(WIDTHSQUARE/2)), 15 )
+                            if board.piecesPos[col][row].possibleMoves[colP][rowP]!=0:
+                                pygame.draw.circle(window, GOLD, (colP*WIDTH_SQUARE+board.x+(WIDTH_SQUARE/2),rowP*WIDTH_SQUARE+board.y+(WIDTH_SQUARE/2)), 15 )
 
 
         ###Draw dead pieces
         ###ChatGPT how to sort a list by name
-        sorted_list = sorted(board.pieceDies, key=lambda obj: ( obj.color,obj.name))
+        sortedList = sorted(board.piecesDie, key=lambda obj: ( obj.color,obj.name))
         ###
         index=0
         reset_index = False
-        for obj in sorted_list:
+        for obj in sortedList:
             
             if obj.color==players[0].color:
                 index+=1
@@ -172,26 +188,34 @@ class Game:
                     
 
 
-
+    ##### Summary
+    ### Function that check all the possible/legal moves of all pieces 
+    ##### Summary
     def HandlePossibleMouvement(self,board): 
         for row in range(ROW):
             for col in range(COL):
-                if board.PiecesPos[col][row]!=0:
-                    board.PiecesPos[col][row].Mouvement(board)
+                if board.piecesPos[col][row]!=0:
+                    board.piecesPos[col][row].Mouvement(board)
+
+
+    ##### Summary
+    ### Main function handle the display of the game and manage the interaction with the players
+    ##### Summary
     def StartGame(self):
+
+        ###Variable implementation
         clock = pygame.time.Clock()
         board=Board(20,20)
-        
-        playerOne=Player(board.x+board.size+WIDTHSQUARE,board.y,BLUE,"Player One",True)
-        playerTwo=Player(board.x+board.size+WIDTHSQUARE,board.y+board.size-WIDTHSQUARE,RED,"Player Two")#playerTwo=Player(RED,True)
+        playerOne=Player(board.x+board.size+WIDTH_SQUARE,board.y,BLUE,"Player One",True)
+        playerTwo=Player(board.x+board.size+WIDTH_SQUARE,board.y+board.size-WIDTH_SQUARE,RED,"Player Two")#playerTwo=Player(RED,True)
         players=[playerOne,playerTwo]
-
-        saveButton=Button(WIDTH-120,board.y,100,80,"Save")
-        menuButton=Button(WIDTH-120,board.y+(saveButton.rect.height*2),100,80,"Menu")
+        saveButton=Button(WIDTH_WINDOW-120,board.y,100,80,"Save")
+        menuButton=Button(WIDTH_WINDOW-120,board.y+(saveButton.rect.height*2),100,80,"Menu")
         
 
         if self.load:
             self.LoadGame(board,players)
+
         Run=True
         #Main loop that display the pygame window and the game(board,pawn,pieces)
         while Run:
@@ -199,46 +223,58 @@ class Game:
             board.DrawBorder(self.window)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    #SaveGame(board,players)
                     pygame.quit()
                     quit()
+
+                ###Handle mouse motion    
                 elif event.type == pygame.MOUSEMOTION :
                     posMouse = pygame.mouse.get_pos()
-                    if not board.lastShowMovement:
+                    if not board.showLastMovement:
                         for row in range(ROW):
                             for col in range(COL):
-                                if board.PiecesPos[col][row]!=0:
-                                        board.PiecesPos[col][row].MouvementPlayer(posMouse,board) 
+                                if board.piecesPos[col][row]!=0:
+                                        board.piecesPos[col][row].MouvementPlayer(posMouse,board)
+
+                ###Handle mouse clicks    
                 elif event.type == pygame.MOUSEBUTTONDOWN :
                     posMouse = pygame.mouse.get_pos()
                     if saveButton.rect.collidepoint(posMouse):
-                        self.SaveGame(board,players)
+                        if not board.showLastMovement: 
+                            self.SaveGame(board,players)
+                        else:
+                            board.ShowLastMovement()
+                            self.SaveGame(board,players)
                     elif menuButton.rect.collidepoint(posMouse):
                         Run= False
                     elif playerOne.rect.collidepoint(posMouse):
-                        board.lastShowMovement=True
+                        if len(board.allMovement)>0:
+                            board.showLastMovement= not board.showLastMovement
+                            board.ShowLastMovement()
 
 
-
+                    ###Handle the player playing and the movement of the piece selected 
                     stopLoops = False
-                    if not board.lastShowMovement:    
+                    if not board.showLastMovement:    
                         for row in range(ROW):
                             for col in range(COL):
-                                if board.PiecesPos[col][row]!=0:
-                                    if playerOne.playing  and board.PiecesPos[col][row].color==playerOne.color:
-                                        if board.PiecesPos[col][row].rect.collidepoint(posMouse):
-                                            board.PiecesPos[col][row].Clicked(posMouse,players,board)
+                                if board.piecesPos[col][row]!=0:
+                                    if playerOne.playing  and board.piecesPos[col][row].color==playerOne.color:
+                                        if board.piecesPos[col][row].rect.collidepoint(posMouse):
+                                            board.piecesPos[col][row].Clicked(posMouse,players,board)
                                             stopLoops=True
                                             break
-                                    elif playerTwo.playing   and board.PiecesPos[col][row].color==playerTwo.color:
-                                        if board.PiecesPos[col][row].rect.collidepoint(posMouse):
-                                            board.PiecesPos[col][row].Clicked(posMouse,players,board)
+                                    elif playerTwo.playing   and board.piecesPos[col][row].color==playerTwo.color:
+                                        if board.piecesPos[col][row].rect.collidepoint(posMouse):
+                                            board.piecesPos[col][row].Clicked(posMouse,players,board)
                                             stopLoops=True
                                             break
 
                             if stopLoops:
                                 break    
                                 
+
+
+
             menuButton.DrawBackGround(self.window)
             menuButton.Draw(self.window)
             saveButton.DrawBackGround(self.window)
@@ -246,6 +282,6 @@ class Game:
             self.HandlePossibleMouvement(board)
             self.Draw(board,self.window,players)
             pygame.display.flip()
-            print (clock.get_fps())
+            #print (clock.get_fps())
             #function to control the frame rate or the maximum number of frames per second (FPS) 
             clock.tick(60)

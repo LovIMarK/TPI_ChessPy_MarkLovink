@@ -1,8 +1,16 @@
-import pygame
+###ETML
+###Auteur : Mark Lovink
+###Date : 15.05.2023
+
+#Import of library and files
 from Piece import Piece
 from Var import *
 
-
+#####
+### Class queen handles all authorized movements of the queen and is font/character. 
+### image represents the character/shape of the queen
+### queenMoves represents the directions in which a queen can move
+#####
 class Queen(Piece):
 
     def __init__(self,x,y,size,color,unicode,col,row,id):
@@ -12,7 +20,7 @@ class Queen(Piece):
 
 
         
-    
+    ###This function is used to check all the available movements of the queen on the chessboard
     def Mouvement(self,board):
         self.possibleMoves.clear()
         self.possibleMoves= [[0] * COL for _ in range(ROW)]
@@ -23,11 +31,11 @@ class Queen(Piece):
                     row = self.row + obj[1] * i
 
                     
-                    if 0 <= col < 8 and 0 <= row < 8 and board.Square[col][row].empty:
+                    if 0 <= col < 8 and 0 <= row < 8 and board.squares[col][row].empty:
                         self.possibleMoves[col][row] = True
-                    elif 0 <= col < 8 and 0 <= row < 8 and not board.Square[col][row].empty:
-                        if board.PiecesPos[col][row] != 0:
-                            if board.PiecesPos[col][row].color != self.color:
+                    elif 0 <= col < 8 and 0 <= row < 8 and not board.squares[col][row].empty:
+                        if board.piecesPos[col][row] != 0:
+                            if board.piecesPos[col][row].color != self.color:
                                 self.possibleMoves[col][row] = True
                             break
                     else:
