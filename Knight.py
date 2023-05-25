@@ -25,14 +25,12 @@ class Knight(Piece):
         self.possibleMoves.clear()
         self.possibleMoves= [[0] * COL for _ in range(ROW)]
         if self.clicked :
-                
-
-                for obj in self.knightMoves:
-                    col = self.col + obj[0]
-                    row = self.row + obj[1]
-                    if 0 <= col < 8 and 0 <= row < 8 and board.squares[col][row].empty:
-                        self.possibleMoves[col][row] = True
-                    elif 0 <= col < 8 and 0 <= row < 8 and not board.squares[col][row].empty :
-                        if board.piecesPos[col][row]!=0 :
-                            if board.piecesPos[col][row].color!=self.color:
-                                self.possibleMoves[col][row] = True
+            for obj in self.knightMoves:
+                col = self.col + obj[0]
+                row = self.row + obj[1]
+                if 0 <= col < 8 and 0 <= row < 8 and board.squares[col][row].empty:
+                    self.possibleMoves[col][row] = True
+                elif 0 <= col < 8 and 0 <= row < 8 and not board.squares[col][row].empty :
+                    if board.piecesPos[col][row]!=0 :
+                        if board.piecesPos[col][row].color!=self.color:
+                            self.possibleMoves[col][row] = True

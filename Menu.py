@@ -15,7 +15,15 @@ pygame.init()
 #Set the window dimensions
 window = pygame.display.set_mode((WIDTH_WINDOW, HEIGHT_WINDOW))
 pygame.display.set_caption("ChessPy")
+font = pygame.font.Font("Fonts/DejaVuSans.ttf", 64)
+image=font.render(KING, True,BLACK)
+fontPawn = pygame.font.Font("Fonts/DejaVuSans.ttf", 128)
+imagePawn=fontPawn.render(PAWN, True,BLACK)
+
+pygame.display.set_icon(image)
 clock = pygame.time.Clock()
+
+texte = font.render("ChessPy", True, BLACK)
 
 
 buttonTwoPlayers=Button(100,HEIGHT_WINDOW/2-80,100,80,"2 Players")
@@ -31,7 +39,8 @@ while Run:
         if event.type == pygame.QUIT:
             pygame.quit()
             quit()
-            
+
+        ###Handle mouse clicks    
         elif event.type == pygame.MOUSEBUTTONDOWN :
             posMouse = pygame.mouse.get_pos()
             if buttonTwoPlayers.rect.collidepoint(posMouse):
@@ -40,9 +49,12 @@ while Run:
             elif buttonLastGame.rect.collidepoint(posMouse):
                 chessGame.load=True
                 chessGame.StartGame()
+                
 
     buttonTwoPlayers.Draw(window)
     buttonLastGame.Draw(window)
+    window.blit(texte, (WIDTH_WINDOW/2-(texte.get_width()/2)-imagePawn.get_width(),200))
+    window.blit(imagePawn, (WIDTH_WINDOW/2+(texte.get_width()/2)-imagePawn.get_width(),150))
     pygame.draw.rect(window, BLACK, (10,10,WIDTH_WINDOW-20,HEIGHT_WINDOW-20),5)
 
     pygame.display.flip()

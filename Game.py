@@ -21,6 +21,7 @@ class Game:
     def __init__(self,window,load=False):
         self.window=window
         self.load=load
+        self.font = pygame.font.Font(None, 36)
 
         
 
@@ -45,7 +46,8 @@ class Game:
                         'id': board.piecesPos[col][row].id,
                         'col': board.piecesPos[col][row].col,
                         'row': board.piecesPos[col][row].row,
-                        'player':player
+                        'player':player,
+                        'AllMovement':board.allMovement
                     }
                     piecesData.append(pieceData)
 
@@ -75,9 +77,11 @@ class Game:
             col = pieceData['col']
             row = pieceData['row']
             player = pieceData['player']
-            
-            pieces.append((id,col,row,player))
+            AllMovement= pieceData['AllMovement']
+            pieces.append((id,col,row,player,AllMovement))
 
+        #Get all movement of the JSON file
+        board.allMovement=AllMovement
 
         # Run through all the board with the new pieces on it
         for row in range(ROW):
@@ -122,7 +126,7 @@ class Game:
     ##### Summary
     ### Function that get all the squares, the pieces, the player and display it in the pygame window 
     ##### Summary
-    def Draw(self,board,window,players):   
+    def Draw(self,board,window,players,showAllMovement,buttons):   
         
         ###Draw board
         for row in range(ROW):
@@ -170,13 +174,14 @@ class Game:
             
             if obj.color==players[0].color:
                 index+=1
-                window.blit(obj.image,(board.size+board.x+(index*30),players[0].rect.y+obj.image.get_height()))
+                window.blit(obj.image,(board.size+board.x+(index*30),players[0].rect.y+WIDTH_SQUARE))
             else:
                 if not reset_index:
                     index=0
                     reset_index=True
                 index+=1
-                window.blit(obj.image,(board.size+board.x+(index*30),board.size+(obj.image.get_height()/2)))
+
+                window.blit(obj.image,(board.size+board.x+(index*30),players[1].rect.y-WIDTH_SQUARE-5))
         
         
 
@@ -184,8 +189,19 @@ class Game:
         ###Draw players
         for obj in players:
             obj.Draw(window)
+
+        for obj in buttons:
+            
+            obj.DrawBackGround(self.window)
+            obj.font = pygame.font.Font(None, 26)
+            obj.Draw(self.window)
+            
+
                     
-                    
+        for obj in showAllMovement:
+            window.blit(obj,(buttons[len(buttons)-1].rect.x+5,buttons[len(buttons)-1].rect.y+((obj.get_height()*2)*showAllMovement.index(obj))+5)) 
+            #obj.image=pygame.transform.scale(obj.image,(40,60))
+            #window.blit(board.piecesPos[board.allMovement[showAllMovement.index(obj)][2]][board.allMovement[showAllMovement.index(obj)][3]].image,(buttons[len(buttons)-1].rect.x+5+15,buttons[len(buttons)-1].rect.y+((obj.get_height()*2)*showAllMovement.index(obj))+5)) 
 
 
     ##### Summary
@@ -199,9 +215,30 @@ class Game:
 
 
     ##### Summary
+    ### Function that get the 5 last piece movement and save it in a text list
+    ##### Summary
+    ### return the list with the 5 last piece movement
+    def ShowAllMovement(self,board):
+        showAllMovement=[]
+        end = len(board.allMovement) - 1
+        start = len(board.allMovement) - 5
+                             
+        for i in range(end, max(start-1, -1), -1):
+            if i%2==0:
+                color=BLUE  
+            else:
+                color=RED  
+            texte = self.font.render("{0} : {1}{2}".format(i+1, chr(board.allMovement[i][2] + 97), board.allMovement[i][3]), True, color)
+            showAllMovement.append(texte)
+
+        return showAllMovement
+
+
+    ##### Summary
     ### Main function handle the display of the game and manage the interaction with the players
     ##### Summary
     def StartGame(self):
+        
 
         ###Variable implementation
         clock = pygame.time.Clock()
@@ -209,9 +246,23 @@ class Game:
         playerOne=Player(board.x+board.size+WIDTH_SQUARE,board.y,BLUE,"Player One",True)
         playerTwo=Player(board.x+board.size+WIDTH_SQUARE,board.y+board.size-WIDTH_SQUARE,RED,"Player Two")#playerTwo=Player(RED,True)
         players=[playerOne,playerTwo]
-        saveButton=Button(WIDTH_WINDOW-120,board.y,100,80,"Save")
-        menuButton=Button(WIDTH_WINDOW-120,board.y+(saveButton.rect.height*2),100,80,"Menu")
+
+        buttons=[]
+        menuButton=Button(WIDTH_WINDOW-120,board.y,100,WIDTH_SQUARE,"Menu")
+        saveButton=Button(WIDTH_WINDOW-120-menuButton.rect.width,board.y,100,WIDTH_SQUARE,"Save")
+        showLastMovementButton=Button(board.x+board.size+WIDTH_SQUARE,board.y+(WIDTH_SQUARE*2),200,WIDTH_SQUARE+5,"LastMove")
+        showMovementButton=Button(board.x+board.size+WIDTH_SQUARE,board.y+(WIDTH_SQUARE*3),200,(3*WIDTH_SQUARE))
+        buttons.append(menuButton)
+        buttons.append(saveButton)
+        buttons.append(showLastMovementButton)
+        buttons.append(showMovementButton)
         
+        
+
+        
+        
+        
+
 
         if self.load:
             self.LoadGame(board,players)
@@ -234,19 +285,24 @@ class Game:
                             for col in range(COL):
                                 if board.piecesPos[col][row]!=0:
                                         board.piecesPos[col][row].MouvementPlayer(posMouse,board)
+                    for obj in buttons:
+                        obj.OnButton(posMouse)
 
                 ###Handle mouse clicks    
                 elif event.type == pygame.MOUSEBUTTONDOWN :
                     posMouse = pygame.mouse.get_pos()
                     if saveButton.rect.collidepoint(posMouse):
+                        saveButton.Clicked()
                         if not board.showLastMovement: 
                             self.SaveGame(board,players)
                         else:
                             board.ShowLastMovement()
                             self.SaveGame(board,players)
                     elif menuButton.rect.collidepoint(posMouse):
+                        menuButton.Clicked()
                         Run= False
-                    elif playerOne.rect.collidepoint(posMouse):
+                    elif showLastMovementButton.rect.collidepoint(posMouse):
+                        showLastMovementButton.Clicked()
                         if len(board.allMovement)>0:
                             board.showLastMovement= not board.showLastMovement
                             board.ShowLastMovement()
@@ -272,15 +328,9 @@ class Game:
                             if stopLoops:
                                 break    
                                 
-
-
-
-            menuButton.DrawBackGround(self.window)
-            menuButton.Draw(self.window)
-            saveButton.DrawBackGround(self.window)
-            saveButton.Draw(self.window)
+            showAllMovement=self.ShowAllMovement(board)                    
             self.HandlePossibleMouvement(board)
-            self.Draw(board,self.window,players)
+            self.Draw(board,self.window,players,showAllMovement,buttons)
             pygame.display.flip()
             #print (clock.get_fps())
             #function to control the frame rate or the maximum number of frames per second (FPS) 

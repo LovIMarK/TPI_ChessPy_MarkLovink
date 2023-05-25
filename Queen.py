@@ -29,8 +29,6 @@ class Queen(Piece):
                 for i in range(1, 8):
                     col = self.col + obj[0] * i
                     row = self.row + obj[1] * i
-
-                    
                     if 0 <= col < 8 and 0 <= row < 8 and board.squares[col][row].empty:
                         self.possibleMoves[col][row] = True
                     elif 0 <= col < 8 and 0 <= row < 8 and not board.squares[col][row].empty:
