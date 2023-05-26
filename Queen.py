@@ -22,11 +22,12 @@ class Queen(Piece):
         
     ###This function is used to check all the available movements of the queen on the chessboard
     def Mouvement(self,board):
-        self.possibleMoves.clear()
-        self.possibleMoves= [[0] * COL for _ in range(ROW)]
+        #Create a two-dimensional table that save all the possible moves
+        self.possibleMoves= [[0] * COL for i in range(ROW)]
         if self.clicked:
             for obj in self.queenMoves:
                 for i in range(1, 8):
+                    #Move diagonally in all directions until the board ends or it touch a piece the same color or from another color
                     col = self.col + obj[0] * i
                     row = self.row + obj[1] * i
                     if 0 <= col < 8 and 0 <= row < 8 and board.squares[col][row].empty:

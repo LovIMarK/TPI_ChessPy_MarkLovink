@@ -17,15 +17,13 @@ class King(Piece):
         super().__init__(x,y,size,color,col,row,"king",id)
         self.image = self.font.render(unicode, True, color)
         self.kingMoves = [(0, 1), (1, 1), (-1, 1), (0, -1), (1, -1), (-1, -1), (1, 0), (-1, 0)]
-        #self.rock=False
         
     
-
             
     ###This function is used to check all the available movements of the king on the chessboard
     def Mouvement(self,board):
-        self.possibleMoves.clear()
-        self.possibleMoves= [[0] * COL for _ in range(ROW)]
+        #Create a two-dimensional table that save all the possible moves
+        self.possibleMoves= [[0] * COL for i in range(ROW)]
         if self.clicked :
             for obj in self.kingMoves:
                 col = self.col + obj[0]

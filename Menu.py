@@ -12,19 +12,18 @@ from Game import Game
 
 pygame.init()
 
-#Set the window dimensions
+###Set the dimensions, title and the icon of the window
 window = pygame.display.set_mode((WIDTH_WINDOW, HEIGHT_WINDOW))
 pygame.display.set_caption("ChessPy")
 font = pygame.font.Font("Fonts/DejaVuSans.ttf", 64)
 image=font.render(KING, True,BLACK)
-fontPawn = pygame.font.Font("Fonts/DejaVuSans.ttf", 128)
-imagePawn=fontPawn.render(PAWN, True,BLACK)
-
 pygame.display.set_icon(image)
-clock = pygame.time.Clock()
-
 texte = font.render("ChessPy", True, BLACK)
 
+clock = pygame.time.Clock()
+
+fontPawn = pygame.font.Font("Fonts/DejaVuSans.ttf", 128)
+imagePawn=fontPawn.render(PAWN, True,BLACK)
 
 buttonTwoPlayers=Button(100,HEIGHT_WINDOW/2-80,100,80,"2 Players")
 buttonLastGame=Button(100,buttonTwoPlayers.rect.y+buttonTwoPlayers.rect.height,100,80,"Last Game")

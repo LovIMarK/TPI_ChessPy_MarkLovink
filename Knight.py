@@ -21,9 +21,8 @@ class Knight(Piece):
         
     ###This function is used to check all the available movements of the knight on the chessboard
     def Mouvement(self,board):
-
-        self.possibleMoves.clear()
-        self.possibleMoves= [[0] * COL for _ in range(ROW)]
+        #Create a two-dimensional table that save all the possible moves
+        self.possibleMoves= [[0] * COL for i in range(ROW)]
         if self.clicked :
             for obj in self.knightMoves:
                 col = self.col + obj[0]

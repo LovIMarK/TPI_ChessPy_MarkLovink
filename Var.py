@@ -1,7 +1,7 @@
 ###ETML
 ###Auteur : Mark Lovink
 ###Date : 15.05.2023
-###Description : Var files handling each constant
+###Description : Var files handling constant of window position, board size, colors, pieces and pawns unicode
 
 
 HEIGHT_WINDOW=800

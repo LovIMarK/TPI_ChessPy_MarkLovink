@@ -16,6 +16,7 @@ from Button import Button
 ### Class Game handles the game display, player interaction, and saved game handling
 ### window represents dimensions of the PyGame window
 ### load variable determines whether the saved game should be displayed or not
+### font variable determines the character font, and size of the text
 #####
 class Game:
     def __init__(self,window,load=False):
@@ -27,7 +28,7 @@ class Game:
 
 
     ##### Summary
-    ### Function that saves the id, column, row of each pieces on the chess board and the player playing in a JSON file
+    ### Function that saves the id, all the movement played, column, row of each pieces on the chess board and the player playing in a JSON file
     ##### Summary
     def SaveGame(self,board,players):
         
@@ -61,7 +62,7 @@ class Game:
 
 
     ##### Summary
-    ### Function get the id, column, row of each pieces and the player playing in the JSON file and display it in the current game
+    ### Function get the id, all the movement played, column, row of each pieces and the player playing in the JSON file and display it in the current game
     ##### Summary
     def LoadGame(self,board,players):
         filePath = 'pieces.json'
@@ -124,7 +125,7 @@ class Game:
 
     
     ##### Summary
-    ### Function that get all the squares, the pieces, the player and display it in the pygame window 
+    ### Function that get all the squares, the pieces, the player, buttons and display it in the pygame window 
     ##### Summary
     def Draw(self,board,window,players,showAllMovement,buttons):   
         
@@ -217,7 +218,7 @@ class Game:
     ##### Summary
     ### Function that get the 5 last piece movement and save it in a text list
     ##### Summary
-    ### return the list with the 5 last piece movement
+    ### Return the list with the 5 last piece movement
     def ShowAllMovement(self,board):
         showAllMovement=[]
         end = len(board.allMovement) - 1
@@ -263,7 +264,7 @@ class Game:
         
         
 
-
+        ###Load last game
         if self.load:
             self.LoadGame(board,players)
 

@@ -15,13 +15,13 @@ from Bishop import Bishop
 
 
 ##### Summary
-### class self handling all the position of the squares and the pieces on a chess self
+### class board handling all the position of the squares and the pieces on a chess self
 ### size represents the size of the all self
 ### border represents the thickness of the border from the self 
 ### x represents the left start value of the self  
 ### y represents the top start value of the self
 ### showLastMovement is a variable to know if the program need to display the last movement
-### piecesPos represents represents a list with all the pieces on the chess self
+### piecesPos represents a list with all the pieces on the chess self
 ### squares represents a list with all the square of the chess self
 ### allMovement is a list that contains the current and previous column and row of all pieces that have been moved in a list
 ### piecesDie represents a list with all the pieces that have been lost
@@ -135,7 +135,7 @@ class Board():
             self.piecesPos[self.allMovement[len(self.allMovement)-1][0]][self.allMovement[len(self.allMovement)-1][1]].rect=pygame.Rect(self.allMovement[len(self.allMovement)-1][0]*WIDTH_SQUARE+self.x,self.allMovement[len(self.allMovement)-1][1]*WIDTH_SQUARE+self.y,WIDTH_SQUARE,WIDTH_SQUARE)
             self.piecesPos[self.allMovement[len(self.allMovement)-1][2]][self.allMovement[len(self.allMovement)-1][3]]=0
 
-            #If i piece has been lost during the last move show it again
+            #If a piece has been lost during the last move show it again
             if len(self.piecesDie)>0 and self.piecesDie[len(self.piecesDie)-1].col==self.allMovement[len(self.allMovement)-1][2] and self.piecesDie[len(self.piecesDie)-1].row==self.allMovement[len(self.allMovement)-1][3]:
                 self.piecesPos[self.piecesDie[len(self.piecesDie)-1].col][self.piecesDie[len(self.piecesDie)-1].row]=self.piecesDie[len(self.piecesDie)-1]
         else:
