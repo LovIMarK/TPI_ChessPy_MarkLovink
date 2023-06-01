@@ -6,7 +6,7 @@
 import pygame
 import json
 from Var import *
-from Board import Board
+from ChessBoard.Board import Board
 from Player import Player
 from Button import Button
 
@@ -23,6 +23,8 @@ class Game:
         self.window=window
         self.load=load
         self.font = pygame.font.Font(None, 36)
+        self.GameOn=True
+        
 
         
 
@@ -132,20 +134,20 @@ class Game:
         ###Draw board
         for row in range(ROW):
             for col in range(COL):
-                window.blit(board.squares[col][row].image, board.squares[col][row].rect)
+                board.squares[col][row].Draw(window)
+                if col==0:
+                    board.squares[col][row].DrawNumber(window,ROW-row)
+                if row ==ROW-1:
+                    board.squares[col][row].DrawAlphabet(window,col)
             
 
         ###Draw pieces
         for row in range(ROW):
             for col in range(COL):
-                
                 if board.piecesPos[col][row]!=0 and not board.piecesPos[col][row].clicked :
                     window.blit(board.piecesPos[col][row].image,(board.piecesPos[col][row].col*WIDTH_SQUARE+board.x,board.piecesPos[col][row].row*WIDTH_SQUARE+board.y))
-                    # pygame.draw.rect(window, (255, 0, 0), board.piecesPos[col][row].rect, 2)
-                    
                 elif board.piecesPos[col][row]!=0 and board.piecesPos[col][row].clicked:
                     window.blit(board.piecesPos[col][row].image,board.piecesPos[col][row].rect)
-                    #pygame.draw.rect(window, (255, 0, 0), board.piecesPos[col][row].rect, 2)
 
 
        
@@ -190,6 +192,8 @@ class Game:
         ###Draw players
         for obj in players:
             obj.Draw(window)
+            if obj.winning:
+                obj.DrawWinner(window)
 
         for obj in buttons:
             
@@ -201,8 +205,6 @@ class Game:
                     
         for obj in showAllMovement:
             window.blit(obj,(buttons[len(buttons)-1].rect.x+5,buttons[len(buttons)-1].rect.y+((obj.get_height()*2)*showAllMovement.index(obj))+5)) 
-            #obj.image=pygame.transform.scale(obj.image,(40,60))
-            #window.blit(board.piecesPos[board.allMovement[showAllMovement.index(obj)][2]][board.allMovement[showAllMovement.index(obj)][3]].image,(buttons[len(buttons)-1].rect.x+5+15,buttons[len(buttons)-1].rect.y+((obj.get_height()*2)*showAllMovement.index(obj))+5)) 
 
 
     ##### Summary
@@ -211,8 +213,14 @@ class Game:
     def HandlePossibleMouvement(self,board): 
         for row in range(ROW):
             for col in range(COL):
-                if board.piecesPos[col][row]!=0:
+                if board.piecesPos[col][row]!=0 :
                     board.piecesPos[col][row].Mouvement(board)
+        
+
+                        
+                    
+
+                    
 
 
     ##### Summary
@@ -223,17 +231,43 @@ class Game:
         showAllMovement=[]
         end = len(board.allMovement) - 1
         start = len(board.allMovement) - 5
-                             
+        indexMove=1                     
         for i in range(end, max(start-1, -1), -1):
             if i%2==0:
                 color=BLUE  
+                texte = self.font.render("{0} : {1}{2}".format(indexMove, chr(board.allMovement[i][2] + 97), board.allMovement[i][3]), True, color)
+                showAllMovement.append(texte)
+                indexMove+=1
             else:
                 color=RED  
-            texte = self.font.render("{0} : {1}{2}".format(i+1, chr(board.allMovement[i][2] + 97), board.allMovement[i][3]), True, color)
-            showAllMovement.append(texte)
+                texte = self.font.render("{0} : {0}{1}".format(indexMove,chr(board.allMovement[i][2] + 97), board.allMovement[i][3]), True, color)
+                showAllMovement.append(texte)
+                
 
         return showAllMovement
 
+        
+    ##### Summary
+    ### Function that checks if the king is in checkmate by verifying if the player has available moves for their pieces or not
+    ##### Summary
+    ### Return the value if checkmate and the winner
+    def CheckCheckMat(self,board,players):
+        if players[0].playing:
+            player=players[0]
+        else :
+            player=players[1]
+        for row in range(ROW):
+            for col in range(COL):
+                if board.piecesPos[col][row]!=0 and board.piecesPos[col][row].color==player.color:
+                    for rowP in range(ROW):
+                        for colP in range(COL):
+                            if board.piecesPos[col][row].possibleMoves[colP][rowP]!=0:
+                                return False , False
+        if players[0].playing:
+            winner=players[1]
+        else :
+            winner=players[0]
+        return True, winner
 
     ##### Summary
     ### Main function handle the display of the game and manage the interaction with the players
@@ -244,8 +278,8 @@ class Game:
         ###Variable implementation
         clock = pygame.time.Clock()
         board=Board(20,20)
-        playerOne=Player(board.x+board.size+WIDTH_SQUARE,board.y,BLUE,"Player One",True)
-        playerTwo=Player(board.x+board.size+WIDTH_SQUARE,board.y+board.size-WIDTH_SQUARE,RED,"Player Two")#playerTwo=Player(RED,True)
+        playerOne=Player(board.x+board.size+WIDTH_SQUARE,board.y,BLUE,"Player Two")
+        playerTwo=Player(board.x+board.size+WIDTH_SQUARE,board.y+board.size-WIDTH_SQUARE,RED,"Player One",True)#playerTwo=Player(RED,True)
         players=[playerOne,playerTwo]
 
         buttons=[]
@@ -281,7 +315,7 @@ class Game:
                 ###Handle mouse motion    
                 elif event.type == pygame.MOUSEMOTION :
                     posMouse = pygame.mouse.get_pos()
-                    if not board.showLastMovement:
+                    if not board.showLastMovement and self.GameOn:
                         for row in range(ROW):
                             for col in range(COL):
                                 if board.piecesPos[col][row]!=0:
@@ -292,7 +326,8 @@ class Game:
                 ###Handle mouse clicks    
                 elif event.type == pygame.MOUSEBUTTONDOWN :
                     posMouse = pygame.mouse.get_pos()
-                    if saveButton.rect.collidepoint(posMouse):
+                    #self.HandlePossibleMouvement(board)
+                    if saveButton.rect.collidepoint(posMouse) and  self.GameOn:
                         saveButton.Clicked()
                         if not board.showLastMovement: 
                             self.SaveGame(board,players)
@@ -301,8 +336,9 @@ class Game:
                             self.SaveGame(board,players)
                     elif menuButton.rect.collidepoint(posMouse):
                         menuButton.Clicked()
+                        self.GameOn=True
                         Run= False
-                    elif showLastMovementButton.rect.collidepoint(posMouse):
+                    elif showLastMovementButton.rect.collidepoint(posMouse) :
                         showLastMovementButton.Clicked()
                         if len(board.allMovement)>0:
                             board.showLastMovement= not board.showLastMovement
@@ -311,7 +347,7 @@ class Game:
 
                     ###Handle the player playing and the movement of the piece selected 
                     stopLoops = False
-                    if not board.showLastMovement:    
+                    if not board.showLastMovement and self.GameOn:    
                         for row in range(ROW):
                             for col in range(COL):
                                 if board.piecesPos[col][row]!=0:
@@ -330,9 +366,15 @@ class Game:
                                 break    
                                 
             showAllMovement=self.ShowAllMovement(board)                    
-            self.HandlePossibleMouvement(board)
+            
             self.Draw(board,self.window,players,showAllMovement,buttons)
+            self.HandlePossibleMouvement(board)
+            
+            checkMat,player=self.CheckCheckMat(board,players)
+            if checkMat:
+                player.winning=True
+                self.GameOn=False
             pygame.display.flip()
-            #print (clock.get_fps())
+            print (clock.get_fps())
             #function to control the frame rate or the maximum number of frames per second (FPS) 
             clock.tick(60)

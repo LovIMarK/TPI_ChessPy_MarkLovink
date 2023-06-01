@@ -5,6 +5,7 @@
 #Import of library and files
 import pygame
 from Var import *
+import copy
 
 ##### Summary
 ### parent class piece handling all the position, surface, font, name, possible movement of the pieces and pawn
@@ -20,7 +21,7 @@ from Var import *
 ##### Summary
 class Piece():
 
-    def __init__(self,x,y,size,color,col,row,name,id):
+    def __init__(self,x,y,size,color,col,row,name,id,check=False):
         super().__init__()
         self.rect = pygame.Rect(x, y, size, size)
         self.font = pygame.font.Font("Fonts/DejaVuSans.ttf", size)
@@ -30,6 +31,7 @@ class Piece():
         self.col=col
         self.row=row
         self.clicked=False
+        self.check=check
         self.possibleMoves=[]
         
 
@@ -56,6 +58,8 @@ class Piece():
             self.rect=pygame.Rect(self.col*WIDTH_SQUARE+board.x,self.row*WIDTH_SQUARE+board.y,WIDTH_SQUARE,WIDTH_SQUARE)
 
 
+  
+
     ##### Summary
     ### Function that change the variable if already clicked or not and change the values of the old piece to is new posiiton
     ##### Summary
@@ -66,7 +70,6 @@ class Piece():
         else:
             self.clicked=False
         
-
         if not self.clicked:
             for row in range(ROW):
                 for col in range(COL):
@@ -90,8 +93,51 @@ class Piece():
                             self.rect=pygame.Rect(self.col*WIDTH_SQUARE+board.x,self.row*WIDTH_SQUARE+board.y,WIDTH_SQUARE,WIDTH_SQUARE)
                             self.firstMove=False
                             self.possibleMoves.clear()
+                            
+                            if board.piecesPos[col][row].check and board.piecesPos[col][row].color==self.color:
+                                for rowP in range(ROW):
+                                    for colP in range(COL):
+                                        if board.piecesPos[colP][rowP]!=0:
+                                            board.piecesPos[colP][rowP].check=False
 
+                            
                             ###Change player
                             for obj in players:
                                 obj.ChangePlayer()
+                                # if obj.playing:
+                                #     if self.ChechCheckMat(board,obj):
+                                #         for obj in players:
+                                #             if not obj.playing:
+                                #                 obj.winning=True
+
                             
+
+
+
+    
+
+
+
+
+
+
+
+    def Simulation(self,board):
+        
+        testBoard=[[0] * COL for i in range(ROW)]
+        for row in range(ROW):
+            for col in range(COL):
+                testBoard[col][row]=copy.copy(board.piecesPos[col][row])
+        testBoard[self.col][self.row]=0
+
+        for row in range(ROW):
+            for col in range(COL):
+                if testBoard[col][row]!=0 and  testBoard[col][row].color!=self.color :
+                    testBoard[col][row].MouvementSimulation(testBoard,board) 
+                
+        for rowS in range(ROW):
+            for colS in range(COL):
+                if testBoard[colS][rowS]!=0 and  testBoard[colS][rowS].color==self.color and testBoard[colS][rowS].check:
+                    return True
+
+        return False

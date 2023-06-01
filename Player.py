@@ -13,6 +13,7 @@ from Var import *
 ### image represents the surface and color of is rectangle
 ### name represents the name of the player    
 ### playing represents a variable that know wich player is playing
+### winning represents a variable that know wich player has won
 ### color represents the color of the player
 ### font represents the character font, and size of the text 
 ### text represents the text of the player 
@@ -28,6 +29,7 @@ class Player():
         self.image.fill(WHITE)
         self.name=name
         self.playing=playing
+        self.winning=False
         self.color=color
         self.font = pygame.font.Font(None, 24)
         self.text = self.font.render(self.name, True, BLACK)
@@ -50,3 +52,15 @@ class Player():
 
         window.blit(self.image, self.rect)
         window.blit(self.text,self.textRect)
+
+    def DrawWinner(self,window):
+        font = pygame.font.Font(None, 42)
+        text=font.render("{0} : à gagné".format(self.name), True, BLACK)
+        rect=pygame.Rect(WIDTH_WINDOW/2-300,HEIGHT_WINDOW/2,300,80)
+        texte_rect = text.get_rect(center=rect.center)
+        pygame.draw.rect(window, WHITE, rect)
+        pygame.draw.rect(window, self.color, rect,5)
+        window.blit(text, texte_rect)
+
+       
+

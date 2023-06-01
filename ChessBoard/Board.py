@@ -5,13 +5,13 @@
 #Import of library and files
 import pygame
 from Var import*
-from Square import Square
-from Pawn import Pawn
-from King import King
-from Rook import Rook
-from Knight import Knight
-from Queen import Queen
-from Bishop import Bishop
+from ChessBoard.Square import Square
+from Pieces.Pawn import Pawn
+from Pieces.King import King
+from Pieces.Rook import Rook
+from Pieces.Knight import Knight
+from Pieces.Queen import Queen
+from Pieces.Bishop import Bishop
 
 
 ##### Summary
@@ -25,6 +25,7 @@ from Bishop import Bishop
 ### squares represents a list with all the square of the chess self
 ### allMovement is a list that contains the current and previous column and row of all pieces that have been moved in a list
 ### piecesDie represents a list with all the pieces that have been lost
+### checkPos represents a list with all the posiiton between a piece and the other king
 ##### Summary
 class Board():
 
@@ -38,6 +39,7 @@ class Board():
         self.squares=[]
         self.allMovement=[]
         self.piecesDie=[]
+        self.checkPos=[]
         self.Drawself()
         self.DrawPieces()
 

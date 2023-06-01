@@ -49,7 +49,7 @@ while Run:
                 chessGame.load=True
                 chessGame.StartGame()
                 
-
+        
     buttonTwoPlayers.Draw(window)
     buttonLastGame.Draw(window)
     window.blit(texte, (WIDTH_WINDOW/2-(texte.get_width()/2)-imagePawn.get_width(),200))
