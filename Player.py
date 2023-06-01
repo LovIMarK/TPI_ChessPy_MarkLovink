@@ -41,10 +41,10 @@ class Player():
     ### Function that change the players turn
     ##### Summary
     def ChangePlayer(self):
-        self.playing=not self.playing
+        self.playing= not self.playing
     
     ##### Summary
-    ### Function that draw hte rectangle of the player and his name
+    ### Function that draw the rectangle of the player and his name
     ##### Summary
     def Draw(self,window):
         if self.playing:
@@ -53,10 +53,13 @@ class Player():
         window.blit(self.image, self.rect)
         window.blit(self.text,self.textRect)
 
-    def DrawWinner(self,window):
+    ##### Summary
+    ### Function that draw hte rectangle of the winner and his name
+    ##### Summary
+    def DrawWinner(self,window,board):
         font = pygame.font.Font(None, 42)
         text=font.render("{0} : à gagné".format(self.name), True, BLACK)
-        rect=pygame.Rect(WIDTH_WINDOW/2-300,HEIGHT_WINDOW/2,300,80)
+        rect=pygame.Rect(board.size/2+board.x-(text.get_width()/2),board.size/2+board.y-80,300,80)
         texte_rect = text.get_rect(center=rect.center)
         pygame.draw.rect(window, WHITE, rect)
         pygame.draw.rect(window, self.color, rect,5)

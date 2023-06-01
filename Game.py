@@ -17,6 +17,7 @@ from Button import Button
 ### window represents dimensions of the PyGame window
 ### load variable determines whether the saved game should be displayed or not
 ### font variable determines the character font, and size of the text
+### GameOn variable that determines if a game has been won 
 #####
 class Game:
     def __init__(self,window,load=False):
@@ -186,14 +187,13 @@ class Game:
 
                 window.blit(obj.image,(board.size+board.x+(index*30),players[1].rect.y-WIDTH_SQUARE-5))
         
-        
 
 
         ###Draw players
         for obj in players:
             obj.Draw(window)
             if obj.winning:
-                obj.DrawWinner(window)
+                obj.DrawWinner(window,board)
 
         for obj in buttons:
             
@@ -216,12 +216,6 @@ class Game:
                 if board.piecesPos[col][row]!=0 :
                     board.piecesPos[col][row].Mouvement(board)
         
-
-                        
-                    
-
-                    
-
 
     ##### Summary
     ### Function that get the 5 last piece movement and save it in a text list
@@ -252,22 +246,28 @@ class Game:
     ##### Summary
     ### Return the value if checkmate and the winner
     def CheckCheckMat(self,board,players):
+            
         if players[0].playing:
             player=players[0]
-        else :
+        if players[1].playing:
             player=players[1]
         for row in range(ROW):
             for col in range(COL):
-                if board.piecesPos[col][row]!=0 and board.piecesPos[col][row].color==player.color:
+                if board.piecesPos[col][row]!=0  and board.piecesPos[col][row].color==player.color:
                     for rowP in range(ROW):
                         for colP in range(COL):
                             if board.piecesPos[col][row].possibleMoves[colP][rowP]!=0:
-                                return False , False
+                                return False 
+        
+        
+
+        
+
         if players[0].playing:
-            winner=players[1]
-        else :
-            winner=players[0]
-        return True, winner
+            players[1].winning=True
+        if players[1].playing:
+            players[0].winning=True
+        return True
 
     ##### Summary
     ### Main function handle the display of the game and manage the interaction with the players
@@ -331,11 +331,11 @@ class Game:
                         saveButton.Clicked()
                         if not board.showLastMovement: 
                             self.SaveGame(board,players)
-                        else:
-                            board.ShowLastMovement()
-                            self.SaveGame(board,players)
                     elif menuButton.rect.collidepoint(posMouse):
                         menuButton.Clicked()
+                        for obj in players:
+                            if obj.winning:
+                                obj.winning=False
                         self.GameOn=True
                         Run= False
                     elif showLastMovementButton.rect.collidepoint(posMouse) :
@@ -369,12 +369,10 @@ class Game:
             
             self.Draw(board,self.window,players,showAllMovement,buttons)
             self.HandlePossibleMouvement(board)
-            
-            checkMat,player=self.CheckCheckMat(board,players)
+            checkMat=self.CheckCheckMat(board,players)
             if checkMat:
-                player.winning=True
                 self.GameOn=False
             pygame.display.flip()
-            print (clock.get_fps())
+            #print (clock.get_fps())
             #function to control the frame rate or the maximum number of frames per second (FPS) 
             clock.tick(60)

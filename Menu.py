@@ -43,8 +43,9 @@ while Run:
         elif event.type == pygame.MOUSEBUTTONDOWN :
             posMouse = pygame.mouse.get_pos()
             if buttonTwoPlayers.rect.collidepoint(posMouse):
-                    chessGame.StartGame()
                     chessGame.load=False
+                    chessGame.StartGame()
+                    
             elif buttonLastGame.rect.collidepoint(posMouse):
                 chessGame.load=True
                 chessGame.StartGame()
@@ -57,7 +58,6 @@ while Run:
     pygame.draw.rect(window, BLACK, (10,10,WIDTH_WINDOW-20,HEIGHT_WINDOW-20),5)
 
     pygame.display.flip()
-    #print (clock.get_fps())
     #function to control the frame rate or the maximum number of frames per second (FPS) 
     clock.tick(60)
 

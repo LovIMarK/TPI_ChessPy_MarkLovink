@@ -20,8 +20,9 @@ class Pawn(Piece):
         self.firstMove=True
 
 
-
-    ###This function is used to check all the available movements of the pawn on the chessboard
+    ##### Summary
+    ### This function is used to check all the available movements of the pawn on the chessboard
+    ##### Summary
     def Mouvement(self,board):
 
 
@@ -30,9 +31,9 @@ class Pawn(Piece):
         self.possibleMoves= [[0] * COL for i in range(ROW)]
         if not self.check and not self.Simulation(board):
             if self.color==BLUE :
-                if self.row < COL-2  and board.squares[self.col][self.row+2].empty and board.squares[self.col][self.row+1].empty and self.firstMove  and not self.Simulation(board) :
+                if self.row < COL-2  and board.squares[self.col][self.row+2].empty and board.squares[self.col][self.row+1].empty and self.firstMove  :
                     self.possibleMoves[self.col][self.row+2]=True
-                if self.row < COL-1  and board.squares[self.col][self.row+1].empty  and not self.Simulation(board):
+                if self.row < COL-1  and board.squares[self.col][self.row+1].empty  :
                     self.possibleMoves[self.col][self.row+1]=True
 
 
@@ -49,7 +50,7 @@ class Pawn(Piece):
                                         
                                 board.checkPos=([(self.row,self.col)])
                     
-                if self.row < COL-1 and self.col >= 0 and self.col <= 7  :
+                if self.row < COL-1 and self.col > 0 and self.col <= 7  :
                     if board.piecesPos[self.col-1][self.row+1]!=0 :
                         if board.piecesPos[self.col-1][self.row+1].color!=self.color:
                             self.possibleMoves[self.col-1][self.row+1]=True
@@ -66,9 +67,9 @@ class Pawn(Piece):
 
 
             if self.color==RED and  not self.check:
-                if self.row > 0 and board.squares[self.col][self.row-2].empty and board.squares[self.col][self.row-1].empty and self.firstMove  and not self.Simulation(board) :
+                if self.row > 0 and board.squares[self.col][self.row-2].empty and board.squares[self.col][self.row-1].empty and self.firstMove :
                     self.possibleMoves[self.col][self.row-2]=True
-                if self.row > 0 and board.squares[self.col][self.row-1].empty  and not self.Simulation(board):
+                if self.row > 0 and board.squares[self.col][self.row-1].empty  :
                     self.possibleMoves[self.col][self.row-1]=True
 
         
@@ -84,7 +85,7 @@ class Pawn(Piece):
                                         
                                 board.checkPos=([(self.row,self.col)])
                     
-                if self.row > 0 and self.col >= 0 and self.col <= 7 :
+                if self.row > 0 and self.col > 0 and self.col <= 7 :
                     if board.piecesPos[self.col-1][self.row-1]!=0 :
                         if board.piecesPos[self.col-1][self.row-1].color==BLUE:
                             self.possibleMoves[self.col-1][self.row-1]=True
@@ -123,7 +124,7 @@ class Pawn(Piece):
                                                 
                                         board.checkPos=([(self.row,self.col)])
                         
-                    if self.row < COL-1 and self.col >= 0 and self.col <= 7  :
+                    if self.row < COL-1 and self.col > 0 and self.col <= 7  :
                         if board.piecesPos[self.col-1][self.row+1]!=0 :
                             if board.piecesPos[self.col-1][self.row+1].color!=self.color:
                                 if self.col-1==board.checkPos[a][1] and self.row+1==board.checkPos[a][0]:
@@ -162,7 +163,7 @@ class Pawn(Piece):
                                                 
                                         board.checkPos=([(self.row,self.col)])
                         
-                    if self.row > 0 and self.col >= 0 and self.col <= 7 :
+                    if self.row > 0 and self.col > 0 and self.col <= 7 :
                         if board.piecesPos[self.col-1][self.row-1]!=0 :
                             if board.piecesPos[self.col-1][self.row-1].color==BLUE:
                                 if self.col-1==board.checkPos[a][1] and self.row-1==board.checkPos[a][0]:
@@ -176,7 +177,9 @@ class Pawn(Piece):
                                         board.checkPos=([(self.row,self.col)])
 
     
-
+    ##### Summary
+    ###This function is used to simulate all the available movements of the pawn on the chessboard for the next round
+    ##### Summary
     def MouvementSimulation(self,testBoard,board):
 
 
@@ -203,7 +206,7 @@ class Pawn(Piece):
                                         testBoard[colP][rowP].check=True
                                     
                 
-            if self.row < COL-1 and self.col >= 0 and self.col <= 7  :
+            if self.row < COL-1 and self.col > 0 and self.col <= 7  :
                 if testBoard[self.col-1][self.row+1]!=0 :
                     if testBoard[self.col-1][self.row+1].color!=self.color:
                         possibleMoves[self.col-1][self.row+1]=True
@@ -236,7 +239,7 @@ class Pawn(Piece):
                                         testBoard[colP][rowP].check=True
                                     
                 
-            if self.row > 0 and self.col >= 0 and self.col <= 7 :
+            if self.row > 0 and self.col > 0 and self.col <= 7 :
                 if testBoard[self.col-1][self.row-1]!=0 :
                     if testBoard[self.col-1][self.row-1].color==BLUE:
                         possibleMoves[self.col-1][self.row-1]=True

@@ -17,12 +17,12 @@ class Knight(Piece):
     def __init__(self,x,y,size,color,unicode,col,row,id, check=False):
         super().__init__(x,y,size,color,col,row,"knight",id,check)
         self.image = self.font.render(unicode, True, color)
-        
         self.knightMoves = [(1, 2), (2, 1), (-1, 2), (-2, 1), (1, -2), (2, -1), (-1, -2), (-2, -1)]
         
 
-        
-    ###This function is used to check all the available movements of the knight on the chessboard
+    ##### Summary
+    ### This function is used to check all the available movements of the knight on the chessboard
+    ##### Summar    
     def Mouvement(self,board):
         #Create a two-dimensional table that save all the possible moves
         self.possibleMoves= [[0] * COL for i in range(ROW)]
@@ -55,7 +55,9 @@ class Knight(Piece):
                         self.possibleMoves[cols][rows] = True
 
 
-
+    ##### Summary
+    ### This function is used to simulate all the available movements of the knight on the chessboard for the next round
+    ##### Summary
     def MouvementSimulation(self,testBoard,board):
         #Create a two-dimensional table that save all the possible moves
         possibleMovessss= [[0] * COL for i in range(ROW)]
@@ -75,14 +77,3 @@ class Knight(Piece):
                                             if testBoard[colP][rowP]!=0 and testBoard[colP][rowP].color!=self.color :
                                                 testBoard[colP][rowP].check=True
                                     
-
-
-        else:
-                 
-            for a in range(len(board.checkPos)):
-                for obj in self.knightMoves:
-                    #Move diagonally in all directions until the board ends or it touch a piece the same color or from another color
-                    cols = self.col + obj[0] 
-                    rows = self.row + obj[1] 
-                    if cols == board.checkPos[a][1] and rows == board.checkPos[a][0] and ( board.squares[cols][rows].empty or ( not board.squares[cols][rows].empty and board.piecesPos[cols][rows].color!=self.color ) ):
-                        possibleMovessss[cols][rows] = True

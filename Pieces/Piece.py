@@ -17,6 +17,7 @@ import copy
 ### col represents the column position of a piece 
 ### row represents the row position of a piece 
 ### clicked represents a variable to know if the pieces has been clicked or not 
+### check represents a variable to know if the king and is pieces are in check
 ### possibleMoves represents a list with the possible movement of a piece
 ##### Summary
 class Piece():
@@ -58,10 +59,8 @@ class Piece():
             self.rect=pygame.Rect(self.col*WIDTH_SQUARE+board.x,self.row*WIDTH_SQUARE+board.y,WIDTH_SQUARE,WIDTH_SQUARE)
 
 
-  
-
     ##### Summary
-    ### Function that change the variable if already clicked or not and change the values of the old piece to is new posiiton
+    ### Function that change the variable if already clicked or not and change the values of the old piece to is new position
     ##### Summary
     def Clicked(self,posMouse,players,board):
         # If mouse on piece and another piece has not been selected
@@ -92,8 +91,9 @@ class Piece():
                             self.row=row
                             self.rect=pygame.Rect(self.col*WIDTH_SQUARE+board.x,self.row*WIDTH_SQUARE+board.y,WIDTH_SQUARE,WIDTH_SQUARE)
                             self.firstMove=False
-                            self.possibleMoves.clear()
+                            #self.possibleMoves.clear()
                             
+                            ### Change the check status
                             if board.piecesPos[col][row].check and board.piecesPos[col][row].color==self.color:
                                 for rowP in range(ROW):
                                     for colP in range(COL):
@@ -104,37 +104,33 @@ class Piece():
                             ###Change player
                             for obj in players:
                                 obj.ChangePlayer()
-                                # if obj.playing:
-                                #     if self.ChechCheckMat(board,obj):
-                                #         for obj in players:
-                                #             if not obj.playing:
-                                #                 obj.winning=True
 
                             
 
+                                
 
 
-    
-
-
-
-
-
-
-
+    ##### Summary
+    ### This function is used to simulate all the piece moves to verify if the king will be in check on the next move
+    ##### Summary
+    ### Returns the value indicating whether the king will be in check or not 
     def Simulation(self,board):
-        
+        ### Copy the actual board
         testBoard=[[0] * COL for i in range(ROW)]
         for row in range(ROW):
             for col in range(COL):
                 testBoard[col][row]=copy.copy(board.piecesPos[col][row])
+        
+        ###Remove the piece to simulate a move
         testBoard[self.col][self.row]=0
 
+        ###Simulate the next round with the actual piece removed
         for row in range(ROW):
             for col in range(COL):
                 if testBoard[col][row]!=0 and  testBoard[col][row].color!=self.color :
                     testBoard[col][row].MouvementSimulation(testBoard,board) 
-                
+
+        ### If a piece is removed and it puts its own king in check, the possible moves of that piece are restricte
         for rowS in range(ROW):
             for colS in range(COL):
                 if testBoard[colS][rowS]!=0 and  testBoard[colS][rowS].color==self.color and testBoard[colS][rowS].check:

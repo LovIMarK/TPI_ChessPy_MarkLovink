@@ -19,53 +19,49 @@ class Queen(Piece):
         self.queenMoves = [(1, 1), (-1, 1), (1, -1), (-1, -1), (1, 0), (-1, 0), (0, 1), (0, -1)]
 
 
-        
-    ###This function is used to check all the available movements of the queen on the chessboard
+    ##### Summary
+    ### This function is used to check all the available movements of the queen on the chessboard
+    ##### Summary       
     def Mouvement(self,board):
 
         #Create a two-dimensional table that save all the possible moves
         self.possibleMoves= [[0] * COL for i in range(ROW)]
-        if not self.check and not self.Simulation(board):
-            for obj in self.queenMoves:
-                for i in range(1, 8):
-                    #Move diagonally in all directions until the board ends or it touch a piece the same color or from another color
-                    col = self.col + obj[0] * i
-                    row = self.row + obj[1] * i
-                    if 0 <= col < 8 and 0 <= row < 8 and board.squares[col][row].empty and not self.Simulation(board):
-                        self.possibleMoves[col][row] = True
-                    
-                    elif 0 <= col < 8 and 0 <= row < 8 and not board.squares[col][row].empty :
-                        if board.piecesPos[col][row]!=0 :
-                            if board.piecesPos[col][row].color!=self.color:
-                                self.possibleMoves[col][row] = True
-                                if board.piecesPos[col][row].name=="king":
-                                    for rowP in range(ROW):
-                                        for colP in range(COL):
-                                            if board.piecesPos[colP][rowP]!=0 and board.piecesPos[colP][rowP].color!=self.color :
-                                                board.piecesPos[colP][rowP].check=True
-                                    
-                                    board.checkPos=self.getPositionsBetween(row,col,self.row,self.col)
-                                    
-                            break  
-                    else:
-                        break
-        else:
-                 
-            board.checkPos.reverse()     
+        for obj in self.queenMoves:
+            for i in range(1, 8):
+                #Move diagonally in all directions until the board ends or it touch a piece the same color or from another color
+                col = self.col + obj[0] * i
+                row = self.row + obj[1] * i
+                if 0 <= col < 8 and 0 <= row < 8 and board.squares[col][row].empty:
+                    self.possibleMoves[col][row] = True
+                
+                elif 0 <= col < 8 and 0 <= row < 8 and not board.squares[col][row].empty :
+                    if board.piecesPos[col][row]!=0 :
+                        if board.piecesPos[col][row].color!=self.color:
+                            self.possibleMoves[col][row] = True
+                            if board.piecesPos[col][row].name=="king":
+                                for rowP in range(ROW):
+                                    for colP in range(COL):
+                                        if board.piecesPos[colP][rowP]!=0 and board.piecesPos[colP][rowP].color!=self.color :
+                                            board.piecesPos[colP][rowP].check=True
+                                
+                                board.checkPos=self.getPositionsBetween(row,col,self.row,self.col)
+                                
+                        break  
+                else:
+                    break
+        if self.check or self.Simulation(board) :
+            ### If the possible movement of the piece equals the position to protect the king
+            possibleMoves= [[0] * COL for i in range(ROW)]
             for a in range(len(board.checkPos)):
-                for obj in self.queenMoves:
-                    for i in range(1, 8):
-                        #Move diagonally in all directions until the board ends or it touch a piece the same color or from another color
-                        cols = self.col + obj[0] * i
-                        rows = self.row + obj[1] * i
-                        if cols == board.checkPos[a][1] and rows == board.checkPos[a][0]  and board.squares[cols][rows].empty:
-                            self.possibleMoves[cols][rows] = True
-                            return
-                        elif cols == board.checkPos[a][1] and rows == board.checkPos[a][0]  and not board.squares[cols][rows].empty:
-                            self.possibleMoves[cols][rows] = True
-                            return
+                if self.possibleMoves[board.checkPos[a][1]][board.checkPos[a][0]]!=0:
+                    possibleMoves[board.checkPos[a][1]][board.checkPos[a][0]]=True
+            ### Previous position list equals new position list
+            self.possibleMoves=possibleMoves
 
     
+    ##### Summary
+    ###This function is used to simulate all the available movements of the queen on the chessboard for the next round
+    ##### Summary
     def MouvementSimulation(self,testBoard,board):
 
         #Create a two-dimensional table that save all the possible moves
@@ -97,7 +93,10 @@ class Queen(Piece):
                  
             
    
-
+    ##### Summary
+    ###This function is used get all the position between the queen and the king when check
+    ##### Summary    
+    ### Return a list with all the position 
     def getPositionsBetween(self, kingRow, kingCol, queenRow, queenCol):
         positionsBetween = []
         positionsBetween.append((queenRow, queenCol))

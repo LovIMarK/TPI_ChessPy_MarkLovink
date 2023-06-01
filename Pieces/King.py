@@ -20,11 +20,11 @@ class King(Piece):
         self.unicode=unicode
         self.image = self.font.render(unicode, True, color)
         self.kingMoves = [(0, 1), (1, 1), (-1, 1), (0, -1), (1, -1), (-1, -1), (1, 0), (-1, 0)]
-        self.check=False
     
   
-
+    ##### Summary
     ###This function is used to check all the available movements of the king on the chessboard
+    ##### Summary
     def Mouvement(self,board):
         #Create a two-dimensional table that save all the possible moves
         self.possibleMoves= [[0] * COL for i in range(ROW)]
@@ -39,44 +39,52 @@ class King(Piece):
                 if board.piecesPos[col][row]!=0 :
                     if board.piecesPos[col][row].color!=self.color:
                         self.possibleMoves[col][row] = True
-                        if board.piecesPos[col][row].name=="king":
-                            board.piecesPos[col][row].check=True
+
         self.KingSimulation(board,self.possibleMoves)
         
+
+    ##### Summary
+    ### This function restricts the king's movement if he tries to put himself in check
+    ##### Summary
+    ### Return the list with the new available moves
     def KingSimulation(self,board,possibleMoves):
+        ### Create a copy of the king
         simulation = copy.copy(King(self.rect.x,self.rect.y,self.rect.size[0],self.color,self.unicode,self.col,self.row,self.id,self.check))
         simulateCol=copy.copy(self.col)
         simulateRoW=copy.copy( self.row)
         for obj in self.kingMoves:
             cols = self.col + obj[0]
             rows = self.row + obj[1]
+
+            ### Create a copy of the board
             testBoard=[[0] * COL for i in range(ROW)]
-            
             for row in range(ROW):
                 for col in range(COL):
                     testBoard[col][row]=copy.copy(board.piecesPos[col][row])
                     if testBoard[col][row]!=0:  
                         testBoard[col][row].check=False
 
+            ###Change the kings position with all is possible moves 
             if 0 <= cols < 8 and 0 <= rows < 8 and possibleMoves[cols][rows]:
                 testBoard[cols][rows]=simulation
                 testBoard[simulateCol][simulateRoW]=0
                 board.squares[cols][rows].empty=False
                 board.squares[simulateCol][simulateRoW].empty=True
-
+                
+                ###Simulate the next round with the new position of the king
                 for row in range(ROW):
                     for col in range(COL):
                         if testBoard[col][row]!=0 and  testBoard[col][row].color!=self.color :
                             testBoard[col][row].MouvementSimulation(testBoard,board) 
 
-                        
+                ### If the new position of the king puts himself in check, remove this position from the list of possible positions for the king
                 for row in range(ROW):
                     for col in range(COL):
                         if testBoard[col][row]!=0 and  testBoard[col][row].color==self.color and testBoard[col][row].check:
                             possibleMoves[cols][rows]=0
                             testBoard[col][row].check=False
                 
-                        
+                ### Reset simulation variable 
                 testBoard[cols][rows]=board.piecesPos[cols][rows]
                 testBoard[simulateCol][simulateRoW]=simulation
                 board.squares[simulateCol][simulateRoW].empty=False
@@ -87,8 +95,11 @@ class King(Piece):
 
 
         return possibleMoves
+    
 
-    ###This function is used to simulate all the available movements of the king on the chessboard for the next round
+    ##### Summary
+    ### This function is used to simulate all the available movements of the king on the chessboard for the next round
+    ##### Summary
     def MouvementSimulation(self,testBoard,board):
         possibleMoves= [[0] * COL for i in range(ROW)]
        
@@ -102,7 +113,6 @@ class King(Piece):
                 if testBoard[col][row]!=0 :
                     if testBoard[col][row].color!=self.color:
                         possibleMoves[col][row] = True
-                        if testBoard[col][row].name=="king":
-                            testBoard[col][row].check=True
+
            
     
