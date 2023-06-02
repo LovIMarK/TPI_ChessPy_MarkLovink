@@ -301,10 +301,10 @@ class Game:
         ###Load last game
         if self.load:
             self.LoadGame(board,players)
-
-        Run=True
+        self.GameOn=True
+        run=True
         #Main loop that display the pygame window and the game(board,pawn,pieces)
-        while Run:
+        while run:
             self.window.fill(GREY)
             board.DrawBorder(self.window)
             for event in pygame.event.get():
@@ -332,12 +332,12 @@ class Game:
                         if not board.showLastMovement: 
                             self.SaveGame(board,players)
                     elif menuButton.rect.collidepoint(posMouse):
-                        menuButton.Clicked()
                         for obj in players:
                             if obj.winning:
                                 obj.winning=False
-                        self.GameOn=True
-                        Run= False
+                        
+                        run= False
+                        menuButton.Clicked()
                     elif showLastMovementButton.rect.collidepoint(posMouse) :
                         showLastMovementButton.Clicked()
                         if len(board.allMovement)>0:
@@ -347,7 +347,7 @@ class Game:
 
                     ###Handle the player playing and the movement of the piece selected 
                     stopLoops = False
-                    if not board.showLastMovement and self.GameOn:    
+                    if not board.showLastMovement and self.GameOn and run:    
                         for row in range(ROW):
                             for col in range(COL):
                                 if board.piecesPos[col][row]!=0:
