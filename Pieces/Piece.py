@@ -51,7 +51,7 @@ class Piece():
     ##### Summary
     ### Function that change the position of the piece selected with the mouse position
     ##### Summary
-    def MouvementPlayer(self,posMouse,board): 
+    def MovementPlayer(self,posMouse,board): 
         if self.clicked :
             self.rect.center=posMouse
         # Else change the surface to prevent a false click
@@ -124,7 +124,7 @@ class Piece():
         for row in range(ROW):
             for col in range(COL):
                 if simulateBoard[col][row]!=0 and  simulateBoard[col][row].color!=self.color :
-                    simulateBoard[col][row].MouvementSimulation(simulateBoard,board) 
+                    simulateBoard[col][row].MovementSimulation(simulateBoard,board) 
 
         ### If a piece is removed and it puts its own king in check, the possible moves of that piece are restricte
         for row in range(ROW):

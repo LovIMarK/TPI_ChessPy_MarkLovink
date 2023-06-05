@@ -24,7 +24,7 @@ class Pawn(Piece):
     ##### Summary
     ### This function is used to check all the available movements of the pawn on the chessboard
     ##### Summary
-    def Mouvement(self,board):
+    def Movement(self,board):
 
 
         #Create a two-dimensional table that save all the possible moves
@@ -181,7 +181,7 @@ class Pawn(Piece):
     ##### Summary
     ###This function is used to simulate all the available movements of the pawn on the chessboard for the next round
     ##### Summary
-    def MouvementSimulation(self,simulateBoard,board):
+    def MovementSimulation(self,simulateBoard,board):
 
 
         #Create a two-dimensional table that save all the possible moves

@@ -22,7 +22,7 @@ class Bishop(Piece):
     ##### Summary
     ### This function is used to check all the available movements of the bishop on the chessboard
     ##### Summary    
-    def Mouvement(self,board):
+    def Movement(self,board):
     
 
         #Create a two-dimensional table that save all the possible moves
@@ -62,7 +62,7 @@ class Bishop(Piece):
     ##### Summary
     ###This function is used to simulate all the available movements of the bishop on the chessboard for the next round
     ##### Summary
-    def MouvementSimulation(self,simulateBoard,board):
+    def MovementSimulation(self,simulateBoard,board):
 
         #Create a two-dimensional table that save all the possible moves
         possibleMoves= [[0] * COL for i in range(ROW)]

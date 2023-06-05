@@ -25,7 +25,7 @@ class King(Piece):
     ##### Summary
     ###This function is used to check all the available movements of the king on the chessboard
     ##### Summary
-    def Mouvement(self,board):
+    def Movement(self,board):
         #Create a two-dimensional table that save all the possible moves
         self.possibleMoves= [[0] * COL for i in range(ROW)]
 
@@ -66,8 +66,6 @@ class King(Piece):
 
             ###Change the kings position with all is possible moves 
             if 0 <= cols < 8 and 0 <= rows < 8 and possibleMoves[cols][rows]:
-                if cols==3 and rows==6:
-                    print()
                 simulateBoard[cols][rows]=simulation
                 simulateBoard[simulateCol][simulateRoW]=0
                 board.squares[cols][rows].empty=False
@@ -77,7 +75,7 @@ class King(Piece):
                 for row in range(ROW):
                     for col in range(COL):
                         if simulateBoard[col][row]!=0 and  simulateBoard[col][row].color!=self.color :
-                            simulateBoard[col][row].MouvementSimulation(simulateBoard,board) 
+                            simulateBoard[col][row].MovementSimulation(simulateBoard,board) 
 
                 ### If the new position of the king puts himself in check, remove this position from the list of possible positions for the king
                 for row in range(ROW):
@@ -102,7 +100,7 @@ class King(Piece):
     ##### Summary
     ### This function is used to simulate all the available movements of the king on the chessboard for the next round
     ##### Summary
-    def MouvementSimulation(self,simulateBoard,board):
+    def MovementSimulation(self,simulateBoard,board):
         possibleMoves= [[0] * COL for i in range(ROW)]
        
         for obj in self.kingMoves:

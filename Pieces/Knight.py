@@ -23,7 +23,7 @@ class Knight(Piece):
     ##### Summary
     ### This function is used to check all the available movements of the knight on the chessboard
     ##### Summar    
-    def Mouvement(self,board):
+    def Movement(self,board):
         #Create a two-dimensional table that save all the possible moves
         self.possibleMoves= [[0] * COL for i in range(ROW)]
         if not self.check and not self.Simulation(board):
@@ -58,7 +58,7 @@ class Knight(Piece):
     ##### Summary
     ### This function is used to simulate all the available movements of the knight on the chessboard for the next round
     ##### Summary
-    def MouvementSimulation(self,simulateBoard,board):
+    def MovementSimulation(self,simulateBoard,board):
         #Create a two-dimensional table that save all the possible moves
         possibleMovessss= [[0] * COL for i in range(ROW)]
         if not self.check:

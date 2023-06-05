@@ -27,10 +27,6 @@ class Game:
         self.font = pygame.font.Font(None, 36)
         self.gameOn=True
         
-
-        
-
-
     ##### Summary
     ### Function that saves the id, all the movement played, column, row of each pieces on the chess board and the player playing in a JSON file
     ##### Summary
@@ -215,11 +211,11 @@ class Game:
     ##### Summary
     ### Function that check all the possible/legal moves of all pieces 
     ##### Summary
-    def HandlePossibleMouvement(self,board): 
+    def HandlePossibleMovement(self,board): 
         for row in range(ROW):
             for col in range(COL):
                 if board.piecesPos[col][row]!=0 :
-                    board.piecesPos[col][row].Mouvement(board)
+                    board.piecesPos[col][row].Movement(board)
         
 
     ##### Summary
@@ -227,22 +223,22 @@ class Game:
     ##### Summary
     ### Return the list with the 5 last piece movement
     def ShowAllMovement(self,board):
+        
         showAllMovement=[]
         end = len(board.allMovement) - 1
-        start = len(board.allMovement) - 5
-        indexMove=1                     
-        for i in range(end, max(start-1, -1), -1):
+        start = len(board.allMovement) - 6
+        
+        for i in range(end, max(start, -1), -1):
             if i%2==0:
                 color=RED  
-                texte = self.font.render("{0} : {1}{2}".format(indexMove, chr(board.allMovement[i][2] + 97), board.allMovement[i][3]), True, color)
+                texte = self.font.render("{0} : {1}{2}".format(int((i/2)+1), chr(board.allMovement[i][2] + 97), POS_ROW_MOVEMENT[board.allMovement[i][3]]), True, color)
                 showAllMovement.append(texte)
-                indexMove+=1
             else:
                 color=BLUE   
-                texte = self.font.render("{0} : {0}{1}".format(indexMove,chr(board.allMovement[i][2] + 97), board.allMovement[i][3]), True, color)
+                texte = self.font.render("{0} : {1}{2}".format(int((i+1)/2),chr(board.allMovement[i][2] + 97), POS_ROW_MOVEMENT[board.allMovement[i][3]]), True, color)
                 showAllMovement.append(texte)
                 
-
+        
         return showAllMovement
 
         
@@ -352,14 +348,14 @@ class Game:
                         for row in range(ROW):
                             for col in range(COL):
                                 if board.piecesPos[col][row]!=0:
-                                        board.piecesPos[col][row].MouvementPlayer(posMouse,board)
+                                        board.piecesPos[col][row].MovementPlayer(posMouse,board)
                     for obj in buttons:
                         obj.OnButton(posMouse)
 
                 ###Handle mouse clicks    
                 elif event.type == pygame.MOUSEBUTTONDOWN :
                     posMouse = pygame.mouse.get_pos()
-                    #self.HandlePossibleMouvement(board)
+                    #self.HandlePossibleMovement(board)
                     if saveButton.rect.collidepoint(posMouse) and  self.gameOn:
                         saveButton.Clicked()
                         if not board.showLastMovement: 
@@ -403,7 +399,7 @@ class Game:
             showAllMovement=self.ShowAllMovement(board)                    
             
             self.Draw(board,self.window,players,showAllMovement,buttons)
-            self.HandlePossibleMouvement(board)
+            self.HandlePossibleMovement(board)
             if self.CheckCheckMate(board,players):
                 self.gameOn=False
             self.HandleTime(players)

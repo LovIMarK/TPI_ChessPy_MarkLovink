@@ -40,7 +40,7 @@ class Board():
         self.allMovement=[]
         self.piecesDie=[]
         self.checkPos=[]
-        self.Drawself()
+        self.DrawBoard()
         self.DrawPieces()
 
     ##### Summary
@@ -53,7 +53,7 @@ class Board():
     ### Function that saves in a table the position of all the squares for the self
     ##### Summary
     ### Return the table with all the squares
-    def Drawself(self):
+    def DrawBoard(self):
         self.squares = [[0] * COL for _ in range(ROW)]
         
 
