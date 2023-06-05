@@ -49,7 +49,7 @@ class King(Piece):
     ### Return the list with the new available moves
     def KingSimulation(self,board,possibleMoves):
         ### Create a copy of the king
-        simulation = copy.copy(King(self.rect.x,self.rect.y,self.rect.size[0],self.color,self.unicode,self.col,self.row,self.id,self.check))
+        simulation = copy.copy(King(self.rect.x,self.rect.y,self.rect.size[0],self.color,self.unicode,self.col,self.row,self.id,False))
         simulateCol=copy.copy(self.col)
         simulateRoW=copy.copy( self.row)
         for obj in self.kingMoves:
@@ -57,36 +57,38 @@ class King(Piece):
             rows = self.row + obj[1]
 
             ### Create a copy of the board
-            testBoard=[[0] * COL for i in range(ROW)]
+            simulateBoard=[[0] * COL for i in range(ROW)]
             for row in range(ROW):
                 for col in range(COL):
-                    testBoard[col][row]=copy.copy(board.piecesPos[col][row])
-                    if testBoard[col][row]!=0:  
-                        testBoard[col][row].check=False
+                    simulateBoard[col][row]=copy.copy(board.piecesPos[col][row])
+                    if simulateBoard[col][row]!=0:  
+                        simulateBoard[col][row].check=False
 
             ###Change the kings position with all is possible moves 
             if 0 <= cols < 8 and 0 <= rows < 8 and possibleMoves[cols][rows]:
-                testBoard[cols][rows]=simulation
-                testBoard[simulateCol][simulateRoW]=0
+                if cols==3 and rows==6:
+                    print()
+                simulateBoard[cols][rows]=simulation
+                simulateBoard[simulateCol][simulateRoW]=0
                 board.squares[cols][rows].empty=False
                 board.squares[simulateCol][simulateRoW].empty=True
                 
                 ###Simulate the next round with the new position of the king
                 for row in range(ROW):
                     for col in range(COL):
-                        if testBoard[col][row]!=0 and  testBoard[col][row].color!=self.color :
-                            testBoard[col][row].MouvementSimulation(testBoard,board) 
+                        if simulateBoard[col][row]!=0 and  simulateBoard[col][row].color!=self.color :
+                            simulateBoard[col][row].MouvementSimulation(simulateBoard,board) 
 
                 ### If the new position of the king puts himself in check, remove this position from the list of possible positions for the king
                 for row in range(ROW):
                     for col in range(COL):
-                        if testBoard[col][row]!=0 and  testBoard[col][row].color==self.color and testBoard[col][row].check:
+                        if simulateBoard[col][row]!=0 and  simulateBoard[col][row].color==self.color and simulateBoard[col][row].check:
                             possibleMoves[cols][rows]=0
-                            testBoard[col][row].check=False
+                            simulateBoard[col][row].check=False
                 
                 ### Reset simulation variable 
-                testBoard[cols][rows]=board.piecesPos[cols][rows]
-                testBoard[simulateCol][simulateRoW]=simulation
+                simulateBoard[cols][rows]=board.piecesPos[cols][rows]
+                simulateBoard[simulateCol][simulateRoW]=simulation
                 board.squares[simulateCol][simulateRoW].empty=False
                 if board.piecesPos[cols][rows]==0:
                     board.squares[cols][rows].empty=True
@@ -100,7 +102,7 @@ class King(Piece):
     ##### Summary
     ### This function is used to simulate all the available movements of the king on the chessboard for the next round
     ##### Summary
-    def MouvementSimulation(self,testBoard,board):
+    def MouvementSimulation(self,simulateBoard,board):
         possibleMoves= [[0] * COL for i in range(ROW)]
        
         for obj in self.kingMoves:
@@ -110,8 +112,8 @@ class King(Piece):
                 
                 possibleMoves[col][row] = True
             elif 0 <= col < 8 and 0 <= row < 8 and not board.squares[col][row].empty :
-                if testBoard[col][row]!=0 :
-                    if testBoard[col][row].color!=self.color:
+                if simulateBoard[col][row]!=0 :
+                    if simulateBoard[col][row].color!=self.color:
                         possibleMoves[col][row] = True
 
            

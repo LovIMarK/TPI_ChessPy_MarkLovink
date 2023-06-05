@@ -54,7 +54,7 @@ while Run:
     buttonTwoPlayers.Draw(window)
     buttonLastGame.Draw(window)
     window.blit(texte, (WIDTH_WINDOW/2-(texte.get_width()/2)-imagePawn.get_width(),200))
-    window.blit(imagePawn, (WIDTH_WINDOW/2+(texte.get_width()/2)-imagePawn.get_width(),150))
+    window.blit(imagePawn, (WIDTH_WINDOW/2+(texte.get_width()/2)-imagePawn.get_width(),150)) 
     pygame.draw.rect(window, BLACK, (10,10,WIDTH_WINDOW-20,HEIGHT_WINDOW-20),5)
 
     pygame.display.flip()

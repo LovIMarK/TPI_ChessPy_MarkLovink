@@ -37,10 +37,10 @@ class Knight(Piece):
                             if board.piecesPos[col][row].color!=self.color:
                                 self.possibleMoves[col][row] = True
                                 if board.piecesPos[col][row].name=="king":
-                                    for rowP in range(ROW):
-                                        for colP in range(COL):
-                                            if board.piecesPos[colP][rowP]!=0 and board.piecesPos[colP][rowP].color!=self.color :
-                                                board.piecesPos[colP][rowP].check=True
+                                    for row2 in range(ROW):
+                                        for col2 in range(COL):
+                                            if board.piecesPos[col2][row2]!=0 and board.piecesPos[col2][row2].color!=self.color :
+                                                board.piecesPos[col2][row2].check=True
                                     
                                     board.checkPos=([(self.row,self.col)])
 
@@ -58,7 +58,7 @@ class Knight(Piece):
     ##### Summary
     ### This function is used to simulate all the available movements of the knight on the chessboard for the next round
     ##### Summary
-    def MouvementSimulation(self,testBoard,board):
+    def MouvementSimulation(self,simulateBoard,board):
         #Create a two-dimensional table that save all the possible moves
         possibleMovessss= [[0] * COL for i in range(ROW)]
         if not self.check:
@@ -68,12 +68,12 @@ class Knight(Piece):
                 if 0 <= col < 8 and 0 <= row < 8 and board.squares[col][row].empty :
                     possibleMovessss[col][row] = True
                 elif 0 <= col < 8 and 0 <= row < 8 and not board.squares[col][row].empty :
-                        if testBoard[col][row]!=0 :
-                            if testBoard[col][row].color!=self.color:
+                        if simulateBoard[col][row]!=0 :
+                            if simulateBoard[col][row].color!=self.color:
                                 possibleMovessss[col][row] = True
-                                if testBoard[col][row].name=="king":
-                                    for rowP in range(ROW):
-                                        for colP in range(COL):
-                                            if testBoard[colP][rowP]!=0 and testBoard[colP][rowP].color!=self.color :
-                                                testBoard[colP][rowP].check=True
+                                if simulateBoard[col][row].name=="king":
+                                    for row2 in range(ROW):
+                                        for col2 in range(COL):
+                                            if simulateBoard[col2][row2]!=0 and simulateBoard[col2][row2].color!=self.color :
+                                                simulateBoard[col2][row2].check=True
                                     

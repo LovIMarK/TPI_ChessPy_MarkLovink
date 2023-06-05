@@ -16,6 +16,7 @@ class Pawn(Piece):
 
     def __init__(self,x,y,size,color,unicode,col,row,id, check=False):
         super().__init__(x,y,size,color,col,row,"pawn",id,check)
+        self.unicode=unicode
         self.image = self.font.render(unicode, True, color)
         self.firstMove=True
 
@@ -43,10 +44,10 @@ class Pawn(Piece):
                         if board.piecesPos[self.col+1][self.row+1].color!=self.color:
                             self.possibleMoves[self.col+1][self.row+1]=True
                             if board.piecesPos[self.col+1][self.row+1].name=="king":
-                                for rowP in range(ROW):
-                                    for colP in range(COL):
-                                        if board.piecesPos[colP][rowP]!=0 and board.piecesPos[colP][rowP].color!=self.color :
-                                            board.piecesPos[colP][rowP].check=True
+                                for row2 in range(ROW):
+                                    for col2 in range(COL):
+                                        if board.piecesPos[col2][row2]!=0 and board.piecesPos[col2][row2].color!=self.color :
+                                            board.piecesPos[col2][row2].check=True
                                         
                                 board.checkPos=([(self.row,self.col)])
                     
@@ -55,10 +56,10 @@ class Pawn(Piece):
                         if board.piecesPos[self.col-1][self.row+1].color!=self.color:
                             self.possibleMoves[self.col-1][self.row+1]=True
                             if board.piecesPos[self.col-1][self.row+1].name=="king":
-                                for rowP in range(ROW):
-                                    for colP in range(COL):
-                                        if board.piecesPos[colP][rowP]!=0 and board.piecesPos[colP][rowP].color!=self.color :
-                                            board.piecesPos[colP][rowP].check=True
+                                for row2 in range(ROW):
+                                    for col2 in range(COL):
+                                        if board.piecesPos[col2][row2]!=0 and board.piecesPos[col2][row2].color!=self.color :
+                                            board.piecesPos[col2][row2].check=True
                                         
                                 board.checkPos=([(self.row,self.col)])
 
@@ -66,7 +67,7 @@ class Pawn(Piece):
 
 
 
-            if self.color==RED and  not self.check:
+            if self.color==RED:
                 if self.row > 0 and board.squares[self.col][self.row-2].empty and board.squares[self.col][self.row-1].empty and self.firstMove :
                     self.possibleMoves[self.col][self.row-2]=True
                 if self.row > 0 and board.squares[self.col][self.row-1].empty  :
@@ -78,10 +79,10 @@ class Pawn(Piece):
                         if board.piecesPos[self.col+1][self.row-1].color==BLUE:
                             self.possibleMoves[self.col+1][self.row-1]=True
                             if board.piecesPos[self.col+1][self.row-1].name=="king":
-                                for rowP in range(ROW):
-                                    for colP in range(COL):
-                                        if board.piecesPos[colP][rowP]!=0 and board.piecesPos[colP][rowP].color!=self.color :
-                                            board.piecesPos[colP][rowP].check=True
+                                for row2 in range(ROW):
+                                    for col2 in range(COL):
+                                        if board.piecesPos[col2][row2]!=0 and board.piecesPos[col2][row2].color!=self.color :
+                                            board.piecesPos[col2][row2].check=True
                                         
                                 board.checkPos=([(self.row,self.col)])
                     
@@ -90,10 +91,10 @@ class Pawn(Piece):
                         if board.piecesPos[self.col-1][self.row-1].color==BLUE:
                             self.possibleMoves[self.col-1][self.row-1]=True
                             if board.piecesPos[self.col-1][self.row-1].name=="king":
-                                for rowP in range(ROW):
-                                    for colP in range(COL):
-                                        if board.piecesPos[colP][rowP]!=0 and board.piecesPos[colP][rowP].color!=self.color :
-                                            board.piecesPos[colP][rowP].check=True
+                                for row2 in range(ROW):
+                                    for col2 in range(COL):
+                                        if board.piecesPos[col2][row2]!=0 and board.piecesPos[col2][row2].color!=self.color :
+                                            board.piecesPos[col2][row2].check=True
                                         
                                 board.checkPos=([(self.row,self.col)])
 
@@ -117,10 +118,10 @@ class Pawn(Piece):
                                 if self.col+1==board.checkPos[a][1] and self.row+1==board.checkPos[a][0]:
                                     self.possibleMoves[self.col+1][self.row+1]=True
                                     if board.piecesPos[self.col+1][self.row+1].name=="king":
-                                        for rowP in range(ROW):
-                                            for colP in range(COL):
-                                                if board.piecesPos[colP][rowP]!=0 and board.piecesPos[colP][rowP].color!=self.color :
-                                                    board.piecesPos[colP][rowP].check=True
+                                        for row2 in range(ROW):
+                                            for col2 in range(COL):
+                                                if board.piecesPos[col2][row2]!=0 and board.piecesPos[col2][row2].color!=self.color :
+                                                    board.piecesPos[col2][row2].check=True
                                                 
                                         board.checkPos=([(self.row,self.col)])
                         
@@ -130,10 +131,10 @@ class Pawn(Piece):
                                 if self.col-1==board.checkPos[a][1] and self.row+1==board.checkPos[a][0]:
                                     self.possibleMoves[self.col-1][self.row+1]=True
                                     if board.piecesPos[self.col-1][self.row+1].name=="king":
-                                        for rowP in range(ROW):
-                                            for colP in range(COL):
-                                                if board.piecesPos[colP][rowP]!=0 and board.piecesPos[colP][rowP].color!=self.color :
-                                                    board.piecesPos[colP][rowP].check=True
+                                        for row2 in range(ROW):
+                                            for col2 in range(COL):
+                                                if board.piecesPos[col2][row2]!=0 and board.piecesPos[col2][row2].color!=self.color :
+                                                    board.piecesPos[col2][row2].check=True
                                                 
                                         board.checkPos=([(self.row,self.col)])
 
@@ -156,10 +157,10 @@ class Pawn(Piece):
                                 if self.col+1==board.checkPos[a][1] and self.row-1==board.checkPos[a][0]:
                                     self.possibleMoves[self.col+1][self.row-1]=True
                                     if board.piecesPos[self.col+1][self.row-1].name=="king":
-                                        for rowP in range(ROW):
-                                            for colP in range(COL):
-                                                if board.piecesPos[colP][rowP]!=0 and board.piecesPos[colP][rowP].color!=self.color :
-                                                    board.piecesPos[colP][rowP].check=True
+                                        for row2 in range(ROW):
+                                            for col2 in range(COL):
+                                                if board.piecesPos[col2][row2]!=0 and board.piecesPos[col2][row2].color!=self.color :
+                                                    board.piecesPos[col2][row2].check=True
                                                 
                                         board.checkPos=([(self.row,self.col)])
                         
@@ -169,10 +170,10 @@ class Pawn(Piece):
                                 if self.col-1==board.checkPos[a][1] and self.row-1==board.checkPos[a][0]:
                                     self.possibleMoves[self.col-1][self.row-1]=True
                                     if board.piecesPos[self.col-1][self.row-1].name=="king":
-                                        for rowP in range(ROW):
-                                            for colP in range(COL):
-                                                if board.piecesPos[colP][rowP]!=0 and board.piecesPos[colP][rowP].color!=self.color :
-                                                    board.piecesPos[colP][rowP].check=True
+                                        for row2 in range(ROW):
+                                            for col2 in range(COL):
+                                                if board.piecesPos[col2][row2]!=0 and board.piecesPos[col2][row2].color!=self.color :
+                                                    board.piecesPos[col2][row2].check=True
                                                 
                                         board.checkPos=([(self.row,self.col)])
 
@@ -180,7 +181,7 @@ class Pawn(Piece):
     ##### Summary
     ###This function is used to simulate all the available movements of the pawn on the chessboard for the next round
     ##### Summary
-    def MouvementSimulation(self,testBoard,board):
+    def MouvementSimulation(self,simulateBoard,board):
 
 
         #Create a two-dimensional table that save all the possible moves
@@ -196,25 +197,25 @@ class Pawn(Piece):
 
 
             if self.row < COL-1 and self.col >= 0 and self.col < 7  :
-                if testBoard[self.col+1][self.row+1]!=0 :
-                    if testBoard[self.col+1][self.row+1].color!=self.color:
+                if simulateBoard[self.col+1][self.row+1]!=0 :
+                    if simulateBoard[self.col+1][self.row+1].color!=self.color:
                         possibleMoves[self.col+1][self.row+1]=True
-                        if testBoard[self.col+1][self.row+1].name=="king":
-                            for rowP in range(ROW):
-                                for colP in range(COL):
-                                    if testBoard[colP][rowP]!=0 and testBoard[colP][rowP].color!=self.color :
-                                        testBoard[colP][rowP].check=True
+                        if simulateBoard[self.col+1][self.row+1].name=="king":
+                            for row2 in range(ROW):
+                                for col2 in range(COL):
+                                    if simulateBoard[col2][row2]!=0 and simulateBoard[col2][row2].color!=self.color :
+                                        simulateBoard[col2][row2].check=True
                                     
                 
             if self.row < COL-1 and self.col > 0 and self.col <= 7  :
-                if testBoard[self.col-1][self.row+1]!=0 :
-                    if testBoard[self.col-1][self.row+1].color!=self.color:
+                if simulateBoard[self.col-1][self.row+1]!=0 :
+                    if simulateBoard[self.col-1][self.row+1].color!=self.color:
                         possibleMoves[self.col-1][self.row+1]=True
-                        if testBoard[self.col-1][self.row+1].name=="king":
-                            for rowP in range(ROW):
-                                for colP in range(COL):
-                                    if testBoard[colP][rowP]!=0 and testBoard[colP][rowP].color!=self.color :
-                                        testBoard[colP][rowP].check=True
+                        if simulateBoard[self.col-1][self.row+1].name=="king":
+                            for row2 in range(ROW):
+                                for col2 in range(COL):
+                                    if simulateBoard[col2][row2]!=0 and simulateBoard[col2][row2].color!=self.color :
+                                        simulateBoard[col2][row2].check=True
                                     
 
 
@@ -229,25 +230,25 @@ class Pawn(Piece):
 
     
             if self.row > 0 and self.col >= 0 and self.col < 7  :
-                if testBoard[self.col+1][self.row-1]!=0 :
-                    if testBoard[self.col+1][self.row-1].color==BLUE:
+                if simulateBoard[self.col+1][self.row-1]!=0 :
+                    if simulateBoard[self.col+1][self.row-1].color==BLUE:
                         possibleMoves[self.col+1][self.row-1]=True
-                        if testBoard[self.col+1][self.row-1].name=="king":
-                            for rowP in range(ROW):
-                                for colP in range(COL):
-                                    if testBoard[colP][rowP]!=0 and testBoard[colP][rowP].color!=self.color :
-                                        testBoard[colP][rowP].check=True
+                        if simulateBoard[self.col+1][self.row-1].name=="king":
+                            for row2 in range(ROW):
+                                for col2 in range(COL):
+                                    if simulateBoard[col2][row2]!=0 and simulateBoard[col2][row2].color!=self.color :
+                                        simulateBoard[col2][row2].check=True
                                     
                 
             if self.row > 0 and self.col > 0 and self.col <= 7 :
-                if testBoard[self.col-1][self.row-1]!=0 :
-                    if testBoard[self.col-1][self.row-1].color==BLUE:
+                if simulateBoard[self.col-1][self.row-1]!=0 :
+                    if simulateBoard[self.col-1][self.row-1].color==BLUE:
                         possibleMoves[self.col-1][self.row-1]=True
-                        if testBoard[self.col-1][self.row-1].name=="king":
-                            for rowP in range(ROW):
-                                for colP in range(COL):
-                                    if testBoard[colP][rowP]!=0 and testBoard[colP][rowP].color!=self.color :
-                                        testBoard[colP][rowP].check=True
+                        if simulateBoard[self.col-1][self.row-1].name=="king":
+                            for row2 in range(ROW):
+                                for col2 in range(COL):
+                                    if simulateBoard[col2][row2]!=0 and simulateBoard[col2][row2].color!=self.color :
+                                        simulateBoard[col2][row2].check=True
                                     
 
 

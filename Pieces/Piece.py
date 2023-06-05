@@ -91,14 +91,13 @@ class Piece():
                             self.row=row
                             self.rect=pygame.Rect(self.col*WIDTH_SQUARE+board.x,self.row*WIDTH_SQUARE+board.y,WIDTH_SQUARE,WIDTH_SQUARE)
                             self.firstMove=False
-                            #self.possibleMoves.clear()
                             
                             ### Change the check status
                             if board.piecesPos[col][row].check and board.piecesPos[col][row].color==self.color:
-                                for rowP in range(ROW):
-                                    for colP in range(COL):
-                                        if board.piecesPos[colP][rowP]!=0:
-                                            board.piecesPos[colP][rowP].check=False
+                                for row2 in range(ROW):
+                                    for col2 in range(COL):
+                                        if board.piecesPos[col2][row2]!=0:
+                                            board.piecesPos[col2][row2].check=False
 
                             
                             ###Change player
@@ -107,33 +106,30 @@ class Piece():
 
                             
 
-                                
-
-
     ##### Summary
     ### This function is used to simulate all the piece moves to verify if the king will be in check on the next move
     ##### Summary
     ### Returns the value indicating whether the king will be in check or not 
     def Simulation(self,board):
         ### Copy the actual board
-        testBoard=[[0] * COL for i in range(ROW)]
+        simulateBoard=[[0] * COL for i in range(ROW)]
         for row in range(ROW):
             for col in range(COL):
-                testBoard[col][row]=copy.copy(board.piecesPos[col][row])
-        
+                simulateBoard[col][row]=copy.copy(board.piecesPos[col][row])
+  
         ###Remove the piece to simulate a move
-        testBoard[self.col][self.row]=0
+        simulateBoard[self.col][self.row]=0
 
         ###Simulate the next round with the actual piece removed
         for row in range(ROW):
             for col in range(COL):
-                if testBoard[col][row]!=0 and  testBoard[col][row].color!=self.color :
-                    testBoard[col][row].MouvementSimulation(testBoard,board) 
+                if simulateBoard[col][row]!=0 and  simulateBoard[col][row].color!=self.color :
+                    simulateBoard[col][row].MouvementSimulation(simulateBoard,board) 
 
         ### If a piece is removed and it puts its own king in check, the possible moves of that piece are restricte
-        for rowS in range(ROW):
-            for colS in range(COL):
-                if testBoard[colS][rowS]!=0 and  testBoard[colS][rowS].color==self.color and testBoard[colS][rowS].check:
+        for row in range(ROW):
+            for col in range(COL):
+                if simulateBoard[col][row]!=0 and  simulateBoard[col][row].color==self.color and simulateBoard[col][row].check:
                     return True
 
         return False

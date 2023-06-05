@@ -9,6 +9,7 @@ from Var import *
 from ChessBoard.Board import Board
 from Player import Player
 from Button import Button
+import time
 
 
 
@@ -17,14 +18,14 @@ from Button import Button
 ### window represents dimensions of the PyGame window
 ### load variable determines whether the saved game should be displayed or not
 ### font variable determines the character font, and size of the text
-### GameOn variable that determines if a game has been won 
+### gameOn variable that determines if a game has been won 
 #####
 class Game:
     def __init__(self,window,load=False):
         self.window=window
         self.load=load
         self.font = pygame.font.Font(None, 36)
-        self.GameOn=True
+        self.gameOn=True
         
 
         
@@ -162,10 +163,10 @@ class Game:
         for row in range(ROW):
             for col in range(COL):
                 if board.piecesPos[col][row]!=0 and board.piecesPos[col][row].clicked:
-                    for rowP in range(ROW):
-                        for colP in range(COL):
-                            if board.piecesPos[col][row].possibleMoves[colP][rowP]!=0:
-                                pygame.draw.circle(window, GOLD, (colP*WIDTH_SQUARE+board.x+(WIDTH_SQUARE/2),rowP*WIDTH_SQUARE+board.y+(WIDTH_SQUARE/2)), 15 )
+                    for row2 in range(ROW):
+                        for col2 in range(COL):
+                            if board.piecesPos[col][row].possibleMoves[col2][row2]!=0:
+                                pygame.draw.circle(window, GOLD, (col2*WIDTH_SQUARE+board.x+(WIDTH_SQUARE/2),row2*WIDTH_SQUARE+board.y+(WIDTH_SQUARE/2)), 15 )
 
 
         ###Draw dead pieces
@@ -192,9 +193,13 @@ class Game:
         ###Draw players
         for obj in players:
             obj.Draw(window)
+            obj.DrawTimer(window)
             if obj.winning:
                 obj.DrawWinner(window,board)
+            if obj.draw:
+                obj.DrawDraw(window,board)
 
+        ###Draw Buttons
         for obj in buttons:
             
             obj.DrawBackGround(self.window)
@@ -202,7 +207,7 @@ class Game:
             obj.Draw(self.window)
             
 
-                    
+        ### draw all movement         
         for obj in showAllMovement:
             window.blit(obj,(buttons[len(buttons)-1].rect.x+5,buttons[len(buttons)-1].rect.y+((obj.get_height()*2)*showAllMovement.index(obj))+5)) 
 
@@ -228,12 +233,12 @@ class Game:
         indexMove=1                     
         for i in range(end, max(start-1, -1), -1):
             if i%2==0:
-                color=BLUE  
+                color=RED  
                 texte = self.font.render("{0} : {1}{2}".format(indexMove, chr(board.allMovement[i][2] + 97), board.allMovement[i][3]), True, color)
                 showAllMovement.append(texte)
                 indexMove+=1
             else:
-                color=RED  
+                color=BLUE   
                 texte = self.font.render("{0} : {0}{1}".format(indexMove,chr(board.allMovement[i][2] + 97), board.allMovement[i][3]), True, color)
                 showAllMovement.append(texte)
                 
@@ -245,8 +250,9 @@ class Game:
     ### Function that checks if the king is in checkmate by verifying if the player has available moves for their pieces or not
     ##### Summary
     ### Return the value if checkmate and the winner
-    def CheckCheckMat(self,board,players):
-            
+    def CheckCheckMate(self,board,players):
+        kingCol=0
+        kingRow=0    
         if players[0].playing:
             player=players[0]
         if players[1].playing:
@@ -254,20 +260,46 @@ class Game:
         for row in range(ROW):
             for col in range(COL):
                 if board.piecesPos[col][row]!=0  and board.piecesPos[col][row].color==player.color:
-                    for rowP in range(ROW):
-                        for colP in range(COL):
-                            if board.piecesPos[col][row].possibleMoves[colP][rowP]!=0:
+                    for row2 in range(ROW):
+                        for col2 in range(COL):
+                            if board.piecesPos[col][row].possibleMoves[col2][row2]!=0:
                                 return False 
+                    if board.piecesPos[col][row].name=="king":
+                        kingCol=col
+                        kingRow=row
         
-        
-
-        
-
-        if players[0].playing:
-            players[1].winning=True
-        if players[1].playing:
-            players[0].winning=True
+        if board.piecesPos[kingCol][kingRow].check:
+            if players[0].playing:
+                players[1].winning=True
+            if players[1].playing:
+                players[0].winning=True
+        else:
+            for obj in players:
+                obj.draw=True
         return True
+
+    ##### Summary
+    ### Function that change the time of each player
+    ##### Summary
+    ### Return the value if checkmate and the winner
+    def HandleTime(self,players):
+        if self.gameOn:
+            for obj in players:
+                if obj.playing :
+                    obj.actualTime = time.time() - obj.timer -obj.PausedDuration
+                    
+                if not obj.playing:
+                    if obj.pausedTime:
+                        obj.PausedDuration = time.time() - obj.pausedTime
+             
+
+
+
+            
+                
+            
+            
+
 
     ##### Summary
     ### Main function handle the display of the game and manage the interaction with the players
@@ -279,7 +311,8 @@ class Game:
         clock = pygame.time.Clock()
         board=Board(20,20)
         playerOne=Player(board.x+board.size+WIDTH_SQUARE,board.y,BLUE,"Player Two")
-        playerTwo=Player(board.x+board.size+WIDTH_SQUARE,board.y+board.size-WIDTH_SQUARE,RED,"Player One",True)#playerTwo=Player(RED,True)
+        playerOne.pausedTime= time.time()
+        playerTwo=Player(board.x+board.size+WIDTH_SQUARE,board.y+board.size-WIDTH_SQUARE,RED,"Player One",True,False)#playerTwo=Player(RED,True)
         players=[playerOne,playerTwo]
 
         buttons=[]
@@ -301,7 +334,7 @@ class Game:
         ###Load last game
         if self.load:
             self.LoadGame(board,players)
-        self.GameOn=True
+        self.gameOn=True
         run=True
         #Main loop that display the pygame window and the game(board,pawn,pieces)
         while run:
@@ -315,7 +348,7 @@ class Game:
                 ###Handle mouse motion    
                 elif event.type == pygame.MOUSEMOTION :
                     posMouse = pygame.mouse.get_pos()
-                    if not board.showLastMovement and self.GameOn:
+                    if not board.showLastMovement and self.gameOn:
                         for row in range(ROW):
                             for col in range(COL):
                                 if board.piecesPos[col][row]!=0:
@@ -327,7 +360,7 @@ class Game:
                 elif event.type == pygame.MOUSEBUTTONDOWN :
                     posMouse = pygame.mouse.get_pos()
                     #self.HandlePossibleMouvement(board)
-                    if saveButton.rect.collidepoint(posMouse) and  self.GameOn:
+                    if saveButton.rect.collidepoint(posMouse) and  self.gameOn:
                         saveButton.Clicked()
                         if not board.showLastMovement: 
                             self.SaveGame(board,players)
@@ -347,7 +380,7 @@ class Game:
 
                     ###Handle the player playing and the movement of the piece selected 
                     stopLoops = False
-                    if not board.showLastMovement and self.GameOn and run:    
+                    if not board.showLastMovement and self.gameOn and run:    
                         for row in range(ROW):
                             for col in range(COL):
                                 if board.piecesPos[col][row]!=0:
@@ -364,14 +397,16 @@ class Game:
 
                             if stopLoops:
                                 break    
-                                
+            
+
+                        
             showAllMovement=self.ShowAllMovement(board)                    
             
             self.Draw(board,self.window,players,showAllMovement,buttons)
             self.HandlePossibleMouvement(board)
-            checkMat=self.CheckCheckMat(board,players)
-            if checkMat:
-                self.GameOn=False
+            if self.CheckCheckMate(board,players):
+                self.gameOn=False
+            self.HandleTime(players)
             pygame.display.flip()
             #print (clock.get_fps())
             #function to control the frame rate or the maximum number of frames per second (FPS) 
