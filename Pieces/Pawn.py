@@ -205,6 +205,8 @@ class Pawn(Piece):
                                 for col2 in range(COL):
                                     if simulateBoard[col2][row2]!=0 and simulateBoard[col2][row2].color!=self.color :
                                         simulateBoard[col2][row2].check=True
+                                        if board.piecesPos[col2][row2]!=0 and  board.piecesPos[col2][row2].color!=self.color and not board.piecesPos[col2][row2].check:
+                                            board.checkPos=([(self.row,self.col)])
                                     
                 
             if self.row < COL-1 and self.col > 0 and self.col <= 7  :
@@ -216,6 +218,8 @@ class Pawn(Piece):
                                 for col2 in range(COL):
                                     if simulateBoard[col2][row2]!=0 and simulateBoard[col2][row2].color!=self.color :
                                         simulateBoard[col2][row2].check=True
+                                        if board.piecesPos[col2][row2]!=0 and  board.piecesPos[col2][row2].color!=self.color and not board.piecesPos[col2][row2].check:
+                                            board.checkPos=([(self.row,self.col)])
                                     
 
 
@@ -238,6 +242,8 @@ class Pawn(Piece):
                                 for col2 in range(COL):
                                     if simulateBoard[col2][row2]!=0 and simulateBoard[col2][row2].color!=self.color :
                                         simulateBoard[col2][row2].check=True
+                                    if board.piecesPos[col2][row2]!=0 and  board.piecesPos[col2][row2].color!=self.color and not board.piecesPos[col2][row2].check:
+                                        board.checkPos=([(self.row,self.col)])
                                     
                 
             if self.row > 0 and self.col > 0 and self.col <= 7 :
@@ -249,7 +255,8 @@ class Pawn(Piece):
                                 for col2 in range(COL):
                                     if simulateBoard[col2][row2]!=0 and simulateBoard[col2][row2].color!=self.color :
                                         simulateBoard[col2][row2].check=True
-                                    
+                                    if board.piecesPos[col2][row2]!=0 and  board.piecesPos[col2][row2].color!=self.color and not board.piecesPos[col2][row2].check:
+                                        board.checkPos=([(self.row,self.col)])
 
 
         
