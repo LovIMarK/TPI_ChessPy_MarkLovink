@@ -1,47 +1,49 @@
-ChessPy - Jeu d'échecs en Python
+# ChessPy - Jeu d'échecs en Python
 
-Description
+## Description
 
-ChessPy est une application de jeu d'échecs développée en Python avec Pygame. Ce projet a été conçu dans le cadre d'un Travail de Fin d'Année (TFA), visant à proposer une simulation interactive et fonctionnelle du jeu d'échecs, incluant un mode multijoueur local et la gestion des règles du jeu.
+**ChessPy** est une application de jeu d'échecs développée en **Python** avec **Pygame**. Ce projet a été conçu dans le cadre d'un Travail de fin d'Année **(TPI)**, visant à proposer une simulation interactive et fonctionnelle du jeu d'échecs, incluant un mode multijoueur local et la gestion des règles du jeu.
 
-Fonctionnalités
+## Fonctionnalités
 
-✅ Interface graphique interactive avec Pygame
-✅ Jeu en mode 2 joueurs
-✅ Sauvegarde et chargement de la dernière partie
-✅ Gestion des règles officielles des échecs (déplacements valides, échec et mat, promotion, roque...)
-✅ Horloge pour mesurer le temps de chaque joueur
-✅ Unités de test intégrées pour assurer la robustesse des fonctions clés
+- **Interface graphique interactive** avec *Pygame*
+- **Mode 2 joueurs** sur le même ordinateur
+- **Sauvegarde et chargement** de la dernière partie
+- **Gestion complète des règles officielles des échecs** :
+  1. Déplacements valides des pièces
+  2. Échec et mat
+  3. Promotion des pions
+  4. Roque
+- **Horloge** pour mesurer le temps des joueurs
+- **Unités de test** intégrées pour assurer la robustesse du jeu
 
-Technologies utilisées
+## Technologies utilisées
 
-Langage : Python (3.x)
+- **Langage** : Python (3.11)
+- **Framework** : Pygame
+- **Tests** : unittest
+- **Fichiers JSON** pour la sauvegarde des positions
+- **Gestion de versions** : Git / GitHub
 
-Framework : Pygame
+## Installation
 
-Tests : unittest
+1. **Cloner le dépôt** :
+   ```sh
+   git clone https://github.com/votre_nom/ChessPy.git
+   cd ChessPy
+   ```
+2. **Installer les dépendances** :
+   ```sh
+   pip install pygame
+   ```
+3. **Lancer l'application** :
+   ```sh
+   python Menu.py
+   ```
 
-Fichiers JSON pour la sauvegarde des pièces
+## Structure du projet
 
-Gestion de versions : Git / GitHub
-
-Installation
-
-Cloner le dépôt
-
-git clone https://github.com/votre_nom/ChessPy.git
-cd ChessPy
-
-Installer les dépendances
-
-pip install pygame
-
-Lancer l'application
-
-python Menu.py
-
-Structure du projet
-
+```
 ChessPy/
 │── Pieces/            # Classes des pièces d'échecs (Roi, Reine, Cavalier...)
 │── Var.py             # Variables globales
@@ -53,31 +55,30 @@ ChessPy/
 │── UnitTest.py        # Tests unitaires
 │── pieces.json        # Sauvegarde des positions
 └── README.md          # Présentation du projet
+```
 
-Comment jouer ?
+## Comment jouer ?
 
-Lancer le jeu : python Menu.py
+1. **Lancer le jeu** :
+   ```sh
+   python Menu.py
+   ```
+2. **Choisir un mode** :
+   - "2 Players" pour jouer à deux sur le même ordinateur
+   - "Last Game" pour charger la dernière partie enregistrée
+3. **Déplacer les pièces** avec la souris selon les règles du jeu d'échecs
 
-Choisir un mode :
+## Améliorations futures
 
-"2 Players" pour jouer à deux sur le même ordinateur
+- Ajouter une **intelligence artificielle** pour jouer contre l'ordinateur
+- Ajouter un **mode en ligne**
+- Améliorer l'**interface graphique**
 
-"Last Game" pour charger la dernière partie enregistrée
+## Auteur
 
-Jouer en déplaçant les pièces avec la souris selon les règles du jeu d'échecs
+- **Nom** : Mark Lovink
 
-Améliorations futures
+## Licence
 
-Ajouter une intelligence artificielle pour jouer contre l'ordinateur
+Ce projet est sous licence **MIT**. Vous êtes libre de le modifier et de l'améliorer ! 🎉
 
-Ajouter un mode en ligne
-
-Améliorer l'interface graphique
-
-Auteur
-
-📌 Mark Lovink🔗 LinkedIn📩 Contact : mark@lovink.ch
-
-Licence
-
-Ce projet est sous licence MIT. Vous êtes libre de le modifier et de l'améliorer ! 🎉
