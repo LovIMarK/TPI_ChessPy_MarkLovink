@@ -2,7 +2,7 @@
 
 ## Description
 
-**ChessPy** est une application de jeu d'échecs développée en **Python** avec **Pygame**. Ce projet a été conçu dans le cadre d'un Travail de fin d'Année **(TPI)**, visant à proposer une simulation interactive et fonctionnelle du jeu d'échecs, incluant un mode multijoueur local et la gestion des règles du jeu.
+**ChessPy** est une application de jeu d'échecs développée en **Python** avec **Pygame**. Ce projet a été conçu dans le cadre d'un Travail de fin d'Année **(TPI)** validé avec une note de **6/6**, visant à proposer une simulation interactive et fonctionnelle du jeu d'échecs, incluant un mode multijoueur local et la gestion des règles du jeu.
 
 ## Fonctionnalités
 
